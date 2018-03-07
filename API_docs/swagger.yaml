@@ -1,0 +1,1092 @@
+---
+swagger: "2.0"
+info:
+  description: "Back-end API del Proyecto Cierzo"
+  version: "1.0.0"
+  title: "Proyecto Cierzo API"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/miguescri/ProySoft/1.0.0"
+tags:
+- name: "admins"
+  description: "Secured Admin-only calls"
+- name: "public"
+  description: "Operations available to everyone"
+- name: "users"
+  description: "Operations available to validated users"
+schemes:
+- "https"
+paths:
+  /songs:
+    get:
+      tags:
+      - "public"
+      summary: "busca canciones con ciertos parámetros"
+      description: "Al pasarle ciertos parámetros devuelve cancionese que se ajusten\
+        \ a ellos\n"
+      operationId: "searchSong"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "nombre de la canción"
+        required: false
+        type: "string"
+      - name: "author"
+        in: "query"
+        description: "autor de la canción"
+        required: false
+        type: "string"
+      - name: "genre"
+        in: "query"
+        description: "genero de la canción"
+        required: false
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "number of records to skip for pagination"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50.0
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SongItem"
+        400:
+          description: "bad input parameter"
+    post:
+      tags:
+      - "admins"
+      summary: "añade una canción"
+      description: "Un admin añade una canción a la base de datos."
+      operationId: "addSong"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "songItem"
+        description: "Song item to add"
+        required: false
+        schema:
+          $ref: "#/definitions/SongItemNew"
+      responses:
+        201:
+          description: "item created"
+          schema:
+            $ref: "#/definitions/SongItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+  /songs/{songID}:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene información de una canción"
+      description: "Obtiene los datos de la canción identificada por songID\n"
+      operationId: "getSong"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/SongItem"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    put:
+      tags:
+      - "admins"
+      summary: "actualiza la información de una canción"
+      description: "Un admin actualiza la información de una canción."
+      operationId: "updateSong"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "songItem"
+        description: "Song item to update"
+        required: false
+        schema:
+          $ref: "#/definitions/SongItemNew"
+      responses:
+        200:
+          description: "item updated"
+          schema:
+            $ref: "#/definitions/SongItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "admins"
+      summary: "elimina una canción"
+      description: "Elimina información y fichero de  la canción identificada por\
+        \ songID\n"
+      operationId: "deleteSong"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "song deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /songs/{songID}/file:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene el archivo de audio de una canción"
+      description: "Obtiene el archivo de audio de la canción identificada por songID\n"
+      operationId: "getSongFile"
+      produces:
+      - "application/vnd.mp3"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            type: "file"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    post:
+      tags:
+      - "admins"
+      summary: "carga el archivo de audio de una canción"
+      description: "Un admin carga el archivo de audio de una canción con identificador\
+        \ songID."
+      operationId: "uploadSongFile"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      - name: "songFile"
+        in: "formData"
+        description: "Song item to update"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "file uploaded"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "admins"
+      summary: "elimina el archivo de audio de una canción"
+      description: "Elimina el fichero de audio de una canción identificada por songID\n"
+      operationId: "deleteSongFile"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "song deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /playlists:
+    get:
+      tags:
+      - "public"
+      summary: "busca listas de reproducción con ciertos parámetros"
+      description: "Al pasarle ciertos parámetros devuelve listas de reproducción\
+        \ que se ajusten a ellos\n"
+      operationId: "searchPlaylist"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "nombre de la lista"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "propietario de la lista"
+        required: false
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "number of records to skip for pagination"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50.0
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PlaylistItem"
+        400:
+          description: "bad input parameter"
+    post:
+      tags:
+      - "users"
+      summary: "crea una lista de reproducción"
+      description: "Un usuario crea una lista de reproducción."
+      operationId: "addPlaylist"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "playlistItem"
+        description: "Playlist item to add"
+        required: false
+        schema:
+          $ref: "#/definitions/PlaylistItemNew"
+      responses:
+        201:
+          description: "item created"
+          schema:
+            $ref: "#/definitions/PlaylistItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+  /playlists/{playlistID}:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene una playlist"
+      description: "Obtiene los datos de la playlist identificada por playlistID\n"
+      operationId: "getPlaylist"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "playlistID"
+        in: "path"
+        description: "ID de la playlist"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/PlaylistItem"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    put:
+      tags:
+      - "users"
+      summary: "actualiza la información de una playlist"
+      description: "Un usuario actualiza la información de una playlist de su propiedad."
+      operationId: "updatePlaylist"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "playlistID"
+        in: "path"
+        description: "ID de la playlist"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "playlistItem"
+        description: "Playlist item to update"
+        required: false
+        schema:
+          $ref: "#/definitions/PlaylistItemNew"
+      responses:
+        200:
+          description: "item updated"
+          schema:
+            $ref: "#/definitions/PlaylistItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "users"
+      summary: "elimina una playlist"
+      description: "Elimina la playlist identificada por playlistID\n"
+      operationId: "deletePlaylist"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "playlistID"
+        in: "path"
+        description: "ID de la playlist"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "playlist deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /playlists{playlistID}/songs:
+    post:
+      tags:
+      - "users"
+      summary: "añade una canción a una lista de reproducción"
+      description: "Un usuario añade una canción a una lista de reproducción de su\
+        \ propiedad."
+      operationId: "addPlaylistSong"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "playlistID"
+        in: "path"
+        description: "ID de la playlist"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "songID"
+        description: "Song to add"
+        required: false
+        schema:
+          type: "string"
+          format: "int32"
+      responses:
+        201:
+          description: "song added"
+          schema:
+            $ref: "#/definitions/PlaylistItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+  /playlists/{playlistID}/songs/{songID}:
+    delete:
+      tags:
+      - "users"
+      summary: "elimina una canción de una playlist identificada por playlistID"
+      description: "Elimina una canción de la playlist identificada por playlistID\n"
+      operationId: "deletePlaylistSong"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "playlistID"
+        in: "path"
+        description: "ID de la playlist"
+        required: true
+        type: "string"
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "song deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /profiles:
+    get:
+      tags:
+      - "public"
+      summary: "busca usuarios con ciertos parámetros"
+      description: "Al pasarle ciertos parámetros devuelve usuarios que se ajusten\
+        \ a ellos\n"
+      operationId: "searchProfiles"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "nombre del usuario"
+        required: false
+        type: "string"
+      - name: "username"
+        in: "query"
+        description: "username del usuario"
+        required: false
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "number of records to skip for pagination"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50.0
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProfileItem"
+        400:
+          description: "bad input parameter"
+  /profiles/{profileID}:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene un perfil de usuario identificado por profileID"
+      description: "Obtiene un perfil de usuario identificado por profileID\n"
+      operationId: "getProfile"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "profileID"
+        in: "path"
+        description: "ID del perfil"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/ProfileItem"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+  /profiles/{profileID}/follow:
+    post:
+      tags:
+      - "users"
+      summary: "comienza a seguir al usuario identificado por profileID"
+      description: "Comienza a seguir al usuario identificado por profileID"
+      operationId: "followProfile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "profileID"
+        in: "path"
+        description: "ID del perfil"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "followed"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "users"
+      summary: "deja de seguir al usuario identificado por profileID"
+      description: "Deja de seguir al usuario identificado por profileID\n"
+      operationId: "unfollowProfile"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "profileID"
+        in: "path"
+        description: "ID del perfil"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "unfollowed"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        404:
+          description: "not found"
+  /account:
+    get:
+      tags:
+      - "users"
+      summary: "devuelve la información de la cuenta del usuario"
+      description: "Devuelve la información de la cuenta del usuario\n"
+      operationId: "getAccount"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Datos de la cuenta del usuario"
+          schema:
+            $ref: "#/definitions/AccountItem"
+        401:
+          description: "need authentification"
+    put:
+      tags:
+      - "users"
+      summary: "actualiza información de cuenta de usuario"
+      description: "Actualiza la información de la cuenta del usuario"
+      operationId: "updateAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "accountItem"
+        description: "Datos a actualizar"
+        required: false
+        schema:
+          $ref: "#/definitions/AccountItemUpdate"
+      responses:
+        200:
+          description: "item updated"
+          schema:
+            $ref: "#/definitions/AccountItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+    delete:
+      tags:
+      - "users"
+      summary: "borra la cuenta del usuario"
+      description: "Elimina definitivamente la cuenta del usuario. No se puede deshacer.\
+        \ No funciona con cuentas de administrador\n"
+      operationId: "deleteAccount"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Cuenta de usuario eliminada"
+        401:
+          description: "need authentification"
+  /account/credentials:
+    put:
+      tags:
+      - "users"
+      summary: "modifica credenciales de acceso de cuenta de usuario"
+      description: "Modifica las credenciales de acceso de la cuenta del usuario"
+      operationId: "updateAccountCredentials"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "loginItem"
+        description: "Datos a actualizar"
+        required: false
+        schema:
+          $ref: "#/definitions/LoginItem"
+      responses:
+        200:
+          description: "item updated"
+          schema:
+            $ref: "#/definitions/AccountItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+  /account/session:
+    get:
+      tags:
+      - "users"
+      summary: "devuelve información de sincronización de canciones"
+      description: "Devuelve la lista de reproducción, la canción y el segundo que\
+        \ estaba escuchando el usuario previamente\n"
+      operationId: "restoreSession"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Session data"
+          schema:
+            $ref: "#/definitions/SessionItem"
+        401:
+          description: "need authentification"
+    put:
+      tags:
+      - "users"
+      summary: "guarda información de sincronización de canciones"
+      description: "Guarda la lista de reproducción, la canción y el segundo que está\
+        \ escuchando el usuario"
+      operationId: "saveSession"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "sessionItem"
+        description: "Datos a sincronizar"
+        required: false
+        schema:
+          $ref: "#/definitions/SessionItem"
+      responses:
+        200:
+          description: "session updated"
+          schema:
+            $ref: "#/definitions/AccountItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+  /signup:
+    post:
+      tags:
+      - "public"
+      summary: "crea cuenta de usuario"
+      description: "Crea una cuenta de usuario"
+      operationId: "createAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "signupItem"
+        description: "Datos de la nueva cuenta"
+        required: false
+        schema:
+          $ref: "#/definitions/SignUpItem"
+      responses:
+        201:
+          description: "account created"
+          schema:
+            $ref: "#/definitions/AccountItem"
+        400:
+          description: "invalid input, object invalid"
+  /login:
+    post:
+      tags:
+      - "public"
+      summary: "inicia sesión de usuario"
+      description: "Inicia sesión de usuario"
+      operationId: "login"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "loginItem"
+        description: "Credenciales"
+        required: false
+        schema:
+          $ref: "#/definitions/LoginItem"
+      responses:
+        201:
+          description: "Successful sign-up"
+          schema:
+            $ref: "#/definitions/AccountItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+    delete:
+      tags:
+      - "users"
+      summary: "cierra sesión de usuario"
+      description: "Cierra la sesión de usuario"
+      operationId: "logout"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Successful signout"
+        401:
+          description: "need authentification"
+definitions:
+  SongItemNew:
+    type: "object"
+    required:
+    - "author"
+    - "genre"
+    - "lenght"
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "Nombre de la nueva canción"
+      lenght:
+        type: "string"
+        format: "int32"
+        example: "03:05"
+      author:
+        type: "string"
+        example: "Autor de la nueva canción"
+      genre:
+        type: "array"
+        items:
+          type: "string"
+          example: "Géneros de la nueva canción"
+    example:
+      lenght: "03:05"
+      author: "Autor de la nueva canción"
+      name: "Nombre de la nueva canción"
+      genre:
+      - "Géneros de la nueva canción"
+      - "Géneros de la nueva canción"
+  SongItem:
+    type: "object"
+    required:
+    - "author"
+    - "genre"
+    - "id"
+    - "lenght"
+    - "name"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "123456789"
+      name:
+        type: "string"
+        example: "I Will Survive"
+      lenght:
+        type: "string"
+        format: "int32"
+        example: "03:05"
+      author:
+        type: "string"
+        example: "Gloria Gaynor"
+      genre:
+        type: "array"
+        items:
+          type: "string"
+          example: "rock"
+    example:
+      lenght: "03:05"
+      author: "Gloria Gaynor"
+      name: "I Will Survive"
+      genre:
+      - "rock"
+      - "rock"
+      id: "123456789"
+  PlaylistItemNew:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Nombre de la nueva lista"
+      description:
+        type: "string"
+        example: "Descripción de la nueva lista"
+    example:
+      name: "Nombre de la nueva lista"
+      description: "Descripción de la nueva lista"
+  PlaylistItem:
+    type: "object"
+    required:
+    - "description"
+    - "id"
+    - "name"
+    - "owner"
+    - "songs"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "98765"
+      name:
+        type: "string"
+        example: "Best music 1980"
+      owner:
+        type: "string"
+        format: "int32"
+        example: "11111"
+      description:
+        type: "string"
+        example: "Relax and enjoy the very best hits of the most awesome decade of\
+          \ music"
+      songs:
+        type: "array"
+        items:
+          $ref: "#/definitions/SongItem"
+    example:
+      owner: "11111"
+      songs:
+      - lenght: "03:05"
+        author: "Gloria Gaynor"
+        name: "I Will Survive"
+        genre:
+        - "rock"
+        - "rock"
+        id: "123456789"
+      - lenght: "03:05"
+        author: "Gloria Gaynor"
+        name: "I Will Survive"
+        genre:
+        - "rock"
+        - "rock"
+        id: "123456789"
+      name: "Best music 1980"
+      description: "Relax and enjoy the very best hits of the most awesome decade\
+        \ of music"
+      id: "98765"
+  ProfileItem:
+    type: "object"
+    required:
+    - "bio"
+    - "friends"
+    - "id"
+    - "name"
+    - "username"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "11111"
+      username:
+        type: "string"
+        example: "rms"
+      name:
+        type: "string"
+        example: "Richard Stallman"
+      bio:
+        type: "string"
+        example: "¡Larga vida al Open Source!"
+      friends:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProfileItem"
+    example:
+      name: "Richard Stallman"
+      bio: "¡Larga vida al Open Source!"
+      id: "11111"
+      friends:
+      - null
+      - null
+      username: "rms"
+  AccountItemUpdate:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "Nuevo username"
+      name:
+        type: "string"
+        example: "Nuevo nombre"
+      bio:
+        type: "string"
+        example: "Nueva bio"
+    example:
+      name: "Nuevo nombre"
+      bio: "Nueva bio"
+      username: "Nuevo username"
+  AccountItem:
+    type: "object"
+    required:
+    - "bio"
+    - "friends"
+    - "id"
+    - "mail"
+    - "name"
+    - "username"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "11111"
+      username:
+        type: "string"
+        example: "rms"
+      name:
+        type: "string"
+        example: "Richard Stallman"
+      bio:
+        type: "string"
+        example: "¡Larga vida al Open Source!"
+      mail:
+        type: "string"
+        example: "rms@gnu.org"
+      friends:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProfileItem"
+    example:
+      mail: "rms@gnu.org"
+      name: "Richard Stallman"
+      bio: "¡Larga vida al Open Source!"
+      id: "11111"
+      friends:
+      - name: "Richard Stallman"
+        bio: "¡Larga vida al Open Source!"
+        id: "11111"
+        friends:
+        - null
+        - null
+        username: "rms"
+      - name: "Richard Stallman"
+        bio: "¡Larga vida al Open Source!"
+        id: "11111"
+        friends:
+        - null
+        - null
+        username: "rms"
+      username: "rms"
+  LoginItem:
+    type: "object"
+    required:
+    - "mail"
+    - "pass"
+    properties:
+      mail:
+        type: "string"
+        example: "rms@gnu.org"
+      pass:
+        type: "string"
+        example: "extremellysecurepassword"
+    example:
+      mail: "rms@gnu.org"
+      pass: "extremellysecurepassword"
+  SignUpItem:
+    type: "object"
+    required:
+    - "mail"
+    - "name"
+    - "pass"
+    - "username"
+    properties:
+      username:
+        type: "string"
+        example: "rms"
+      name:
+        type: "string"
+        example: "Richard Stallman"
+      mail:
+        type: "string"
+        example: "rms@gnu.org"
+      pass:
+        type: "string"
+        example: "extremellysecurepassword"
+    example:
+      mail: "rms@gnu.org"
+      pass: "extremellysecurepassword"
+      name: "Richard Stallman"
+      username: "rms"
+  SessionItem:
+    type: "object"
+    required:
+    - "playlistID"
+    - "second"
+    - "songID"
+    properties:
+      playlistID:
+        type: "string"
+        format: "int32"
+        example: "345"
+      songID:
+        type: "string"
+        format: "int32"
+        example: "4975"
+      second:
+        type: "string"
+        format: "int32"
+        example: "120"
+    example:
+      playlistID: "345"
+      songID: "4975"
+      second: "120"
