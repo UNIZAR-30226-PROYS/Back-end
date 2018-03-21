@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Back-end API del Proyecto Cierzo"
-  version: "1.0.0"
+  version: "2.0.0"
   title: "Proyecto Cierzo API"
   license:
     name: "Apache 2.0"
@@ -264,6 +264,327 @@ paths:
           description: "operation forbidden for user"
         404:
           description: "not found"
+  /songs/{songID}/image:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene la carátula de una canción"
+      description: "Obtiene la carátula de la canción identificada por songID\n"
+      operationId: "getSongImage"
+      produces:
+      - "image/png"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            type: "file"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    post:
+      tags:
+      - "admins"
+      summary: "carga la carátula de una canción"
+      description: "Un admin carga la carátula de una canción con identificador songID."
+      operationId: "uploadSongImage"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      - name: "songImage"
+        in: "formData"
+        description: "Image item to update"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "file uploaded"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "admins"
+      summary: "elimina la carátula de una canción"
+      description: "Elimina la carátula de una canción identificada por songID\n"
+      operationId: "deleteSongImage"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "songID"
+        in: "path"
+        description: "ID de la canción"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "image deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /albums:
+    get:
+      tags:
+      - "public"
+      summary: "busca álbunes con ciertos parámetros"
+      description: "Al pasarle ciertos parámetros devuelve álbunes que se ajusten\
+        \ a ellos\n"
+      operationId: "searchAlbum"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "nombre del álbum"
+        required: false
+        type: "string"
+      - name: "author"
+        in: "query"
+        description: "autor del álbum"
+        required: false
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "number of records to skip for pagination"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50.0
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AlbumItem"
+        400:
+          description: "bad input parameter"
+    post:
+      tags:
+      - "admins"
+      summary: "crea un álbum"
+      description: "Un administrador crea un álbum"
+      operationId: "addAlbum"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "albumItem"
+        description: "Album item to add"
+        required: false
+        schema:
+          $ref: "#/definitions/AlbumItemNew"
+      responses:
+        201:
+          description: "item created"
+          schema:
+            $ref: "#/definitions/AlbumItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbiden for user"
+  /albums/{albumID}:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene un álbum"
+      description: "Obtiene los datos del álbum identificada por albumID\n"
+      operationId: "getAlbum"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "albumID"
+        in: "path"
+        description: "ID del álbum"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/AlbumItem"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "admins"
+      summary: "elimina un álbum"
+      description: "Elimina el álbum identificado por albumID\n"
+      operationId: "deleteAlbum"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "albumID"
+        in: "path"
+        description: "ID del álbum"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "album deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /albums/{albumID}/image:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene la carátula de un álbum"
+      description: "Obtiene la carátula de un álbum identificado por albumID\n"
+      operationId: "getAlbumImage"
+      produces:
+      - "image/png"
+      parameters:
+      - name: "albumID"
+        in: "path"
+        description: "ID del álbum"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            type: "file"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    post:
+      tags:
+      - "admins"
+      summary: "carga la carátula de un álbum"
+      description: "Un admin carga la carátula de un álbum con identificador albumID."
+      operationId: "uploadAlbumImage"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "albumID"
+        in: "path"
+        description: "ID del álbum"
+        required: true
+        type: "string"
+      - name: "albumImage"
+        in: "formData"
+        description: "Album image to update"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "image uploaded"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "admins"
+      summary: "elimina la carátula de un álbum"
+      description: "Elimina la carátula de un álbum identificadoa por albumID\n"
+      operationId: "deleteAlbumImage"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "albumID"
+        in: "path"
+        description: "ID del álbum"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "image deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+  /albums/{albumID}/songs:
+    post:
+      tags:
+      - "admins"
+      summary: "añade una canción a un album"
+      description: "Un admin añade una canción a un album"
+      operationId: "addAlbumSong"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "albumID"
+        in: "path"
+        description: "ID del album"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "songID"
+        description: "Song to add"
+        required: false
+        schema:
+          type: "string"
+          format: "int32"
+      responses:
+        201:
+          description: "song added"
+          schema:
+            $ref: "#/definitions/AlbumItem"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
   /playlists:
     get:
       tags:
@@ -453,6 +774,10 @@ paths:
           description: "invalid input, object invalid"
         401:
           description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
   /playlists/{playlistID}/songs/{songID}:
     delete:
       tags:
@@ -484,13 +809,159 @@ paths:
           description: "operation forbidden for user"
         404:
           description: "not found"
+  /authors:
+    get:
+      tags:
+      - "public"
+      summary: "busca autores con ciertos parámetros"
+      description: "Al pasarle ciertos parámetros devuelve autores que se ajusten\
+        \ a ellos\n"
+      operationId: "searchAuthors"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "nombre del autor"
+        required: false
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "number of records to skip for pagination"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50.0
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuthorItem"
+        400:
+          description: "bad input parameter"
+  /authors/{authorID}:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene un perfil de autor identificado por authorID"
+      description: "Obtiene un perfil de autor identificado por authorID\n"
+      operationId: "getAuthor"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "authorID"
+        in: "path"
+        description: "ID del autor"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/AuthorItem"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+  /authors/{authorID}/image:
+    get:
+      tags:
+      - "public"
+      summary: "obtiene la imagen de un autor"
+      description: "Obtiene la imagen de un autor identificado por authorID\n"
+      operationId: "getAuthorImage"
+      produces:
+      - "image/png"
+      parameters:
+      - name: "authorID"
+        in: "path"
+        description: "ID del autor"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            type: "file"
+        400:
+          description: "bad input parameter"
+        404:
+          description: "not found"
+    post:
+      tags:
+      - "admins"
+      summary: "carga la imagen e un autor"
+      description: "Un admin carga la imagen de un autor con identificador authorID."
+      operationId: "uploadAuthorImage"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "authorID"
+        in: "path"
+        description: "ID del autor"
+        required: true
+        type: "string"
+      - name: "authorImage"
+        in: "formData"
+        description: "Image item to update"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "file uploaded"
+        400:
+          description: "invalid input, object invalid"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
+    delete:
+      tags:
+      - "admins"
+      summary: "elimina la imagen de un autor"
+      description: "Elimina la imagen de un autor identificado por authorID\n"
+      operationId: "deleteAuthorImage"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "authorID"
+        in: "path"
+        description: "ID del autor"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "image deleted"
+        400:
+          description: "bad input parameter"
+        401:
+          description: "need authentification"
+        403:
+          description: "operation forbidden for user"
+        404:
+          description: "not found"
   /profiles:
     get:
       tags:
       - "public"
       summary: "busca usuarios con ciertos parámetros"
       description: "Al pasarle ciertos parámetros devuelve usuarios que se ajusten\
-        \ a ellos\n"
+        \ a ellos. El campo \"friends\" de los amigos de un usuario está siempre vací\
+        o (valor NULL)\n"
       operationId: "searchProfiles"
       produces:
       - "application/json"
@@ -534,7 +1005,8 @@ paths:
       tags:
       - "public"
       summary: "obtiene un perfil de usuario identificado por profileID"
-      description: "Obtiene un perfil de usuario identificado por profileID\n"
+      description: "Obtiene un perfil de usuario identificado por profileID. El campo\
+        \ \"friends\" de los amigos de un usuario está siempre vacío (valor NULL)\n"
       operationId: "getProfile"
       produces:
       - "application/json"
@@ -607,7 +1079,8 @@ paths:
       tags:
       - "users"
       summary: "devuelve la información de la cuenta del usuario"
-      description: "Devuelve la información de la cuenta del usuario\n"
+      description: "Devuelve la información de la cuenta del usuario. El campo \"\
+        friends\" de los amigos de un usuario está siempre vacío (valor NULL)\n"
       operationId: "getAccount"
       produces:
       - "application/json"
@@ -623,7 +1096,8 @@ paths:
       tags:
       - "users"
       summary: "actualiza información de cuenta de usuario"
-      description: "Actualiza la información de la cuenta del usuario"
+      description: "Actualiza la información de la cuenta del usuario. El campo \"\
+        friends\" de los amigos de un usuario está siempre vacío (valor NULL)"
       operationId: "updateAccount"
       consumes:
       - "application/json"
@@ -665,7 +1139,9 @@ paths:
       tags:
       - "users"
       summary: "modifica credenciales de acceso de cuenta de usuario"
-      description: "Modifica las credenciales de acceso de la cuenta del usuario"
+      description: "Modifica las credenciales de acceso de la cuenta del usuario.\
+        \ El campo \"friends\" de los amigos de un usuario está siempre vacío (valor\
+        \ NULL)"
       operationId: "updateAccountCredentials"
       consumes:
       - "application/json"
@@ -762,7 +1238,8 @@ paths:
       tags:
       - "public"
       summary: "inicia sesión de usuario"
-      description: "Inicia sesión de usuario"
+      description: "Inicia sesión de usuario. El campo \"friends\" de los amigos de\
+        \ un usuario está siempre vacío (valor NULL)"
       operationId: "login"
       consumes:
       - "application/json"
@@ -802,7 +1279,8 @@ definitions:
   SongItemNew:
     type: "object"
     required:
-    - "author"
+    - "albumID"
+    - "authorID"
     - "genre"
     - "lenght"
     - "name"
@@ -814,9 +1292,14 @@ definitions:
         type: "string"
         format: "int32"
         example: "03:05"
-      author:
+      authorID:
         type: "string"
-        example: "Autor de la nueva canción"
+        format: "int32"
+        example: "6789"
+      albumID:
+        type: "string"
+        format: "int32"
+        example: "45"
       genre:
         type: "array"
         items:
@@ -824,15 +1307,19 @@ definitions:
           example: "Géneros de la nueva canción"
     example:
       lenght: "03:05"
-      author: "Autor de la nueva canción"
       name: "Nombre de la nueva canción"
       genre:
       - "Géneros de la nueva canción"
       - "Géneros de la nueva canción"
+      albumID: "45"
+      authorID: "6789"
   SongItem:
     type: "object"
     required:
-    - "author"
+    - "albumID"
+    - "albumName"
+    - "authorID"
+    - "authorName"
     - "genre"
     - "id"
     - "lenght"
@@ -849,9 +1336,20 @@ definitions:
         type: "string"
         format: "int32"
         example: "03:05"
-      author:
+      authorID:
+        type: "string"
+        format: "int32"
+        example: "4567"
+      authorName:
         type: "string"
         example: "Gloria Gaynor"
+      albumID:
+        type: "string"
+        format: "int32"
+        example: "9876"
+      albumName:
+        type: "string"
+        example: "Allenrok"
       genre:
         type: "array"
         items:
@@ -859,14 +1357,19 @@ definitions:
           example: "rock"
     example:
       lenght: "03:05"
-      author: "Gloria Gaynor"
+      albumName: "Allenrok"
+      authorName: "Gloria Gaynor"
       name: "I Will Survive"
       genre:
       - "rock"
       - "rock"
+      albumID: "9876"
       id: "123456789"
+      authorID: "4567"
   PlaylistItemNew:
     type: "object"
+    required:
+    - "name"
     properties:
       name:
         type: "string"
@@ -880,10 +1383,12 @@ definitions:
   PlaylistItem:
     type: "object"
     required:
+    - "creationDate"
     - "description"
     - "id"
     - "name"
-    - "owner"
+    - "ownerID"
+    - "ownerName"
     - "songs"
     properties:
       id:
@@ -893,10 +1398,17 @@ definitions:
       name:
         type: "string"
         example: "Best music 1980"
-      owner:
+      ownerID:
         type: "string"
         format: "int32"
         example: "11111"
+      ownerName:
+        type: "string"
+        example: "Richard Stallman"
+      creationDate:
+        type: "string"
+        format: "date"
+        example: "2018-03-11T00:00:00.000Z"
       description:
         type: "string"
         example: "Relax and enjoy the very best hits of the most awesome decade of\
@@ -906,26 +1418,216 @@ definitions:
         items:
           $ref: "#/definitions/SongItem"
     example:
-      owner: "11111"
+      ownerName: "Richard Stallman"
       songs:
       - lenght: "03:05"
-        author: "Gloria Gaynor"
+        albumName: "Allenrok"
+        authorName: "Gloria Gaynor"
         name: "I Will Survive"
         genre:
         - "rock"
         - "rock"
+        albumID: "9876"
         id: "123456789"
+        authorID: "4567"
       - lenght: "03:05"
-        author: "Gloria Gaynor"
+        albumName: "Allenrok"
+        authorName: "Gloria Gaynor"
         name: "I Will Survive"
         genre:
         - "rock"
         - "rock"
+        albumID: "9876"
         id: "123456789"
+        authorID: "4567"
       name: "Best music 1980"
       description: "Relax and enjoy the very best hits of the most awesome decade\
         \ of music"
       id: "98765"
+      ownerID: "11111"
+      creationDate: "2018-03-11T00:00:00.000Z"
+  AlbumItemNew:
+    type: "object"
+    required:
+    - "authorID"
+    - "name"
+    - "publishDate"
+    properties:
+      name:
+        type: "string"
+        example: "Nombre del album"
+      authorID:
+        type: "string"
+        format: "int32"
+        example: "9876"
+      publishDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21T00:00:00.000Z"
+      description:
+        type: "string"
+        example: "Descripción del album"
+    example:
+      name: "Nombre del album"
+      publishDate: "2017-07-21T00:00:00.000Z"
+      description: "Descripción del album"
+      authorID: "9876"
+  AlbumItem:
+    type: "object"
+    required:
+    - "authorID"
+    - "authorName"
+    - "description"
+    - "id"
+    - "name"
+    - "songs"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "98765"
+      name:
+        type: "string"
+        example: "Allenrok"
+      authorID:
+        type: "string"
+        format: "int32"
+        example: "4678"
+      authorName:
+        type: "string"
+        example: "Estopa"
+      publishDate:
+        type: "string"
+        format: "date"
+        example: "2017-07-21T00:00:00.000Z"
+      description:
+        type: "string"
+        example: "A tope, nene"
+      songs:
+        type: "array"
+        items:
+          $ref: "#/definitions/SongItem"
+    example:
+      authorName: "Estopa"
+      songs:
+      - lenght: "03:05"
+        albumName: "Allenrok"
+        authorName: "Gloria Gaynor"
+        name: "I Will Survive"
+        genre:
+        - "rock"
+        - "rock"
+        albumID: "9876"
+        id: "123456789"
+        authorID: "4567"
+      - lenght: "03:05"
+        albumName: "Allenrok"
+        authorName: "Gloria Gaynor"
+        name: "I Will Survive"
+        genre:
+        - "rock"
+        - "rock"
+        albumID: "9876"
+        id: "123456789"
+        authorID: "4567"
+      name: "Allenrok"
+      publishDate: "2017-07-21T00:00:00.000Z"
+      description: "A tope, nene"
+      id: "98765"
+      authorID: "4678"
+  AuthorItemNew:
+    type: "object"
+    required:
+    - "bio"
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "Estopa"
+      bio:
+        type: "string"
+        example: "Los hermanos Muñoz de Cornellá"
+  AuthorItem:
+    type: "object"
+    required:
+    - "albums"
+    - "bio"
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "11111"
+      name:
+        type: "string"
+        example: "Estopa"
+      bio:
+        type: "string"
+        example: "Los hermanos Muñoz de Cornellá"
+      albums:
+        type: "array"
+        items:
+          $ref: "#/definitions/AlbumItem"
+    example:
+      albums:
+      - authorName: "Estopa"
+        songs:
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        name: "Allenrok"
+        publishDate: "2017-07-21T00:00:00.000Z"
+        description: "A tope, nene"
+        id: "98765"
+        authorID: "4678"
+      - authorName: "Estopa"
+        songs:
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        name: "Allenrok"
+        publishDate: "2017-07-21T00:00:00.000Z"
+        description: "A tope, nene"
+        id: "98765"
+        authorID: "4678"
+      name: "Estopa"
+      bio: "Los hermanos Muñoz de Cornellá"
+      id: "11111"
   ProfileItem:
     type: "object"
     required:
@@ -933,6 +1635,7 @@ definitions:
     - "friends"
     - "id"
     - "name"
+    - "playlists"
     - "username"
     properties:
       id:
@@ -952,8 +1655,69 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/ProfileItem"
+      playlists:
+        type: "array"
+        items:
+          $ref: "#/definitions/PlaylistItem"
     example:
       name: "Richard Stallman"
+      playlists:
+      - ownerName: "Richard Stallman"
+        songs:
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        name: "Best music 1980"
+        description: "Relax and enjoy the very best hits of the most awesome decade\
+          \ of music"
+        id: "98765"
+        ownerID: "11111"
+        creationDate: "2018-03-11T00:00:00.000Z"
+      - ownerName: "Richard Stallman"
+        songs:
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        name: "Best music 1980"
+        description: "Relax and enjoy the very best hits of the most awesome decade\
+          \ of music"
+        id: "98765"
+        ownerID: "11111"
+        creationDate: "2018-03-11T00:00:00.000Z"
       bio: "¡Larga vida al Open Source!"
       id: "11111"
       friends:
@@ -984,6 +1748,7 @@ definitions:
     - "id"
     - "mail"
     - "name"
+    - "playlists"
     - "username"
     properties:
       id:
@@ -1006,13 +1771,131 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/ProfileItem"
+      playlists:
+        type: "array"
+        items:
+          $ref: "#/definitions/PlaylistItem"
     example:
       mail: "rms@gnu.org"
       name: "Richard Stallman"
+      playlists:
+      - ownerName: "Richard Stallman"
+        songs:
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        name: "Best music 1980"
+        description: "Relax and enjoy the very best hits of the most awesome decade\
+          \ of music"
+        id: "98765"
+        ownerID: "11111"
+        creationDate: "2018-03-11T00:00:00.000Z"
+      - ownerName: "Richard Stallman"
+        songs:
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        - lenght: "03:05"
+          albumName: "Allenrok"
+          authorName: "Gloria Gaynor"
+          name: "I Will Survive"
+          genre:
+          - "rock"
+          - "rock"
+          albumID: "9876"
+          id: "123456789"
+          authorID: "4567"
+        name: "Best music 1980"
+        description: "Relax and enjoy the very best hits of the most awesome decade\
+          \ of music"
+        id: "98765"
+        ownerID: "11111"
+        creationDate: "2018-03-11T00:00:00.000Z"
       bio: "¡Larga vida al Open Source!"
       id: "11111"
       friends:
       - name: "Richard Stallman"
+        playlists:
+        - ownerName: "Richard Stallman"
+          songs:
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          name: "Best music 1980"
+          description: "Relax and enjoy the very best hits of the most awesome decade\
+            \ of music"
+          id: "98765"
+          ownerID: "11111"
+          creationDate: "2018-03-11T00:00:00.000Z"
+        - ownerName: "Richard Stallman"
+          songs:
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          name: "Best music 1980"
+          description: "Relax and enjoy the very best hits of the most awesome decade\
+            \ of music"
+          id: "98765"
+          ownerID: "11111"
+          creationDate: "2018-03-11T00:00:00.000Z"
         bio: "¡Larga vida al Open Source!"
         id: "11111"
         friends:
@@ -1020,6 +1903,63 @@ definitions:
         - null
         username: "rms"
       - name: "Richard Stallman"
+        playlists:
+        - ownerName: "Richard Stallman"
+          songs:
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          name: "Best music 1980"
+          description: "Relax and enjoy the very best hits of the most awesome decade\
+            \ of music"
+          id: "98765"
+          ownerID: "11111"
+          creationDate: "2018-03-11T00:00:00.000Z"
+        - ownerName: "Richard Stallman"
+          songs:
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          - lenght: "03:05"
+            albumName: "Allenrok"
+            authorName: "Gloria Gaynor"
+            name: "I Will Survive"
+            genre:
+            - "rock"
+            - "rock"
+            albumID: "9876"
+            id: "123456789"
+            authorID: "4567"
+          name: "Best music 1980"
+          description: "Relax and enjoy the very best hits of the most awesome decade\
+            \ of music"
+          id: "98765"
+          ownerID: "11111"
+          creationDate: "2018-03-11T00:00:00.000Z"
         bio: "¡Larga vida al Open Source!"
         id: "11111"
         friends:
