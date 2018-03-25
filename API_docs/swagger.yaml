@@ -960,8 +960,7 @@ paths:
       - "public"
       summary: "busca usuarios con ciertos parámetros"
       description: "Al pasarle ciertos parámetros devuelve usuarios que se ajusten\
-        \ a ellos. El campo \"friends\" de los amigos de un usuario está siempre vací\
-        o (valor NULL)\n"
+        \ a ellos.\n"
       operationId: "searchProfiles"
       produces:
       - "application/json"
@@ -1005,8 +1004,7 @@ paths:
       tags:
       - "public"
       summary: "obtiene un perfil de usuario identificado por profileID"
-      description: "Obtiene un perfil de usuario identificado por profileID. El campo\
-        \ \"friends\" de los amigos de un usuario está siempre vacío (valor NULL)\n"
+      description: "Obtiene un perfil de usuario identificado por profileID.\n"
       operationId: "getProfile"
       produces:
       - "application/json"
@@ -1079,8 +1077,7 @@ paths:
       tags:
       - "users"
       summary: "devuelve la información de la cuenta del usuario"
-      description: "Devuelve la información de la cuenta del usuario. El campo \"\
-        friends\" de los amigos de un usuario está siempre vacío (valor NULL)\n"
+      description: "Devuelve la información de la cuenta del usuario.\n"
       operationId: "getAccount"
       produces:
       - "application/json"
@@ -1628,6 +1625,32 @@ definitions:
       name: "Estopa"
       bio: "Los hermanos Muñoz de Cornellá"
       id: "11111"
+  FriendItem:
+    type: "object"
+    required:
+    - "bio"
+    - "id"
+    - "name"
+    - "username"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "11111"
+      username:
+        type: "string"
+        example: "rms"
+      name:
+        type: "string"
+        example: "Coleguita Molón"
+      bio:
+        type: "string"
+        example: "Somos muy amigos"
+    example:
+      name: "Coleguita Molón"
+      bio: "Somos muy amigos"
+      id: "11111"
+      username: "rms"
   ProfileItem:
     type: "object"
     required:
@@ -1654,7 +1677,7 @@ definitions:
       friends:
         type: "array"
         items:
-          $ref: "#/definitions/ProfileItem"
+          $ref: "#/definitions/FriendItem"
       playlists:
         type: "array"
         items:
@@ -1721,8 +1744,14 @@ definitions:
       bio: "¡Larga vida al Open Source!"
       id: "11111"
       friends:
-      - null
-      - null
+      - name: "Coleguita Molón"
+        bio: "Somos muy amigos"
+        id: "11111"
+        username: "rms"
+      - name: "Coleguita Molón"
+        bio: "Somos muy amigos"
+        id: "11111"
+        username: "rms"
       username: "rms"
   AccountItemUpdate:
     type: "object"
@@ -1770,7 +1799,7 @@ definitions:
       friends:
         type: "array"
         items:
-          $ref: "#/definitions/ProfileItem"
+          $ref: "#/definitions/FriendItem"
       playlists:
         type: "array"
         items:
@@ -1838,133 +1867,13 @@ definitions:
       bio: "¡Larga vida al Open Source!"
       id: "11111"
       friends:
-      - name: "Richard Stallman"
-        playlists:
-        - ownerName: "Richard Stallman"
-          songs:
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          name: "Best music 1980"
-          description: "Relax and enjoy the very best hits of the most awesome decade\
-            \ of music"
-          id: "98765"
-          ownerID: "11111"
-          creationDate: "2018-03-11T00:00:00.000Z"
-        - ownerName: "Richard Stallman"
-          songs:
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          name: "Best music 1980"
-          description: "Relax and enjoy the very best hits of the most awesome decade\
-            \ of music"
-          id: "98765"
-          ownerID: "11111"
-          creationDate: "2018-03-11T00:00:00.000Z"
-        bio: "¡Larga vida al Open Source!"
+      - name: "Coleguita Molón"
+        bio: "Somos muy amigos"
         id: "11111"
-        friends:
-        - null
-        - null
         username: "rms"
-      - name: "Richard Stallman"
-        playlists:
-        - ownerName: "Richard Stallman"
-          songs:
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          name: "Best music 1980"
-          description: "Relax and enjoy the very best hits of the most awesome decade\
-            \ of music"
-          id: "98765"
-          ownerID: "11111"
-          creationDate: "2018-03-11T00:00:00.000Z"
-        - ownerName: "Richard Stallman"
-          songs:
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          - lenght: "03:05"
-            albumName: "Allenrok"
-            authorName: "Gloria Gaynor"
-            name: "I Will Survive"
-            genre:
-            - "rock"
-            - "rock"
-            albumID: "9876"
-            id: "123456789"
-            authorID: "4567"
-          name: "Best music 1980"
-          description: "Relax and enjoy the very best hits of the most awesome decade\
-            \ of music"
-          id: "98765"
-          ownerID: "11111"
-          creationDate: "2018-03-11T00:00:00.000Z"
-        bio: "¡Larga vida al Open Source!"
+      - name: "Coleguita Molón"
+        bio: "Somos muy amigos"
         id: "11111"
-        friends:
-        - null
-        - null
         username: "rms"
       username: "rms"
   LoginItem:
