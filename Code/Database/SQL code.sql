@@ -93,3 +93,10 @@ CREATE TABLE public.Session
     time INT NOT NULL,
     CONSTRAINT Session_listsong_listid_songid_fk FOREIGN KEY (listid, songid) REFERENCES listsong (listid, songid)
 );
+
+CREATE ROLE read_only LOGIN PASSWORD 'claveLecturaSegura';
+
+GRANT SELECT ON ALL TABLES IN SCHEMA public to read_only;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+    GRANT SELECT ON TABLES TO read_only;
