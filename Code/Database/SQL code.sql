@@ -94,9 +94,19 @@ CREATE TABLE public.Session
     CONSTRAINT Session_listsong_listid_songid_fk FOREIGN KEY (listid, songid) REFERENCES listsong (listid, songid)
 );
 
-CREATE ROLE read_only LOGIN PASSWORD 'claveLecturaSegura';
+CREATE ROLE read_write LOGIN PASSWORD 'PasswordReadWrite';
 
-GRANT SELECT ON ALL TABLES IN SCHEMA public to read_only;
+GRANT SELECT ON ALL TABLES IN SCHEMA public to read_write;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
-    GRANT SELECT ON TABLES TO read_only;
+    GRANT SELECT ON TABLES TO read_write;
+
+GRANT INSERT ON ALL TABLES IN SCHEMA public to read_write;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+    GRANT INSERT ON TABLES TO read_write;
+
+GRANT DELETE ON ALL TABLES IN SCHEMA public to read_write;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+    GRANT DELETE ON TABLES TO read_write;

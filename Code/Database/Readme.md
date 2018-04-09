@@ -1,3 +1,4 @@
+# Documentación relacionada con la Base de Datos
 
 ## Docker postgres
 
@@ -14,19 +15,21 @@ sudo docker start BD
 
 ## Parametros de conexion a la BD [usuarios]
 
-#--usuario adminsitrador--#
-#- Puede gestionar (crear, modificar y elimiar) tablas.
-#- Puede leer tablas
-#- Puede crear roles
+### Usuario adminsitrador
+#### - Puede gestionar (crear, modificar y elimiar) tablas.
+#### - Puede leer tablas
+#### - Puede gestionar el contenido de las tablas
+#### - Puede crear roles
 
 usuario: postgres
 contraseña: mysecretpassword
 
-#--usuario solo lectura--#
-#- Unicamente puede interrogar tablas (SELECT)
+### Usuario solo lectura y escritura
+#### - Puede interrogar tablas (SELECT)
+#### - Puede gestionar el contenido de las tablas
 
-usuario: read_only
-contraseña: claveLecturaSegura
+usuario: read_write
+contraseña: PasswordReadWrite
 
 ## Parametros de conexion a la BD [URL]
 

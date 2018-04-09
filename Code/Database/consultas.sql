@@ -19,7 +19,7 @@ SELECT image FROM album WHERE id = ?;
 SELECT file FROM song WHERE id = ?;
 
 --Obtener albunes dado año de lanzamiento
-SELECT * FROM album WHERE EXTRACT(YEAR FROM publishdate) = ?;
+SELECT id, name, groupid, publishdate, description, image FROM album WHERE EXTRACT(YEAR FROM publishdate) = ?;
 
 -- Obtener lista de albunes dado un autor
 SELECT a.id, a.name, a.groupid, a.publishdate, a.description, a.image FROM album a, components c, "Group" g WHERE a.groupid = g.id AND g.id = c.groupid AND c.artistid = ?;
