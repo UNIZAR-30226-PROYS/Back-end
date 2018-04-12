@@ -95,19 +95,33 @@ CREATE TABLE public.Session
     CONSTRAINT Session_listsong_listid_songid_fk FOREIGN KEY (listid, songid) REFERENCES listsong (listid, songid)
 );
 
+-- Creado el rol de escritura y lectura
 CREATE ROLE read_write LOGIN PASSWORD 'PasswordReadWrite';
 
+-- Leer tablas en schema public
 GRANT SELECT ON ALL TABLES IN SCHEMA public to read_write;
 
+-- Leer futuras tablas en schema public
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
     GRANT SELECT ON TABLES TO read_write;
 
+-- Insertar en tablas en schema public
 GRANT INSERT ON ALL TABLES IN SCHEMA public to read_write;
 
+-- Insertar en futuras tablas en schema public
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
     GRANT INSERT ON TABLES TO read_write;
 
+-- Eliminar en tablas en schema public
 GRANT DELETE ON ALL TABLES IN SCHEMA public to read_write;
 
+-- Eliminar en futuras tablas en schema public
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
     GRANT DELETE ON TABLES TO read_write;
+
+-- Actualizar en tablas en schema public
+GRANT UPDATE ON ALL TABLES IN SCHEMA public to read_write;
+
+-- Actualizar en futuras tablas en schema public
+ALTER DEFAULT PRIVILEGES  IN SCHEMA public
+    GRANT UPDATE ON TABLES TO read_write;
