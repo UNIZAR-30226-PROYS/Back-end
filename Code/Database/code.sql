@@ -109,6 +109,22 @@ $create_fav_list$ LANGUAGE plpgsql;
 
 CREATE TRIGGER create_fav_list AFTER INSERT ON "User"
   FOR EACH ROW EXECUTE PROCEDURE create_fav_list();
+  
+  
+ -- DELETEAR USUARIO --
+
+CREATE FUNCTION del_user_info() RETURNS TRIGGER AS $del_user_info$
+  BEGIN
+    DELETE FROM session WHERE userid = old.id;
+    DELETE FROM follower WHERE userid = old.id OR followedid = old.id;
+    DELETE FROM listsong WHERE listid IN (SELECT id FROM list WHERE userid = old.id);
+    DELETE FROM list WHERE userid = old.id;
+    RETURN old;
+  END;
+$del_user_info$ LANGUAGE plpgsql;
+
+CREATE TRIGGER del_user_info BEFORE DELETE ON "User"
+  FOR EACH ROW EXECUTE PROCEDURE del_user_info(); 
 
 -- ROLES --
 -- Creado el rol de escritura y lectura
