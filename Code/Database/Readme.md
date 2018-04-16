@@ -3,14 +3,15 @@
 ## Docker postgres
 
 
-Comandos de obtencion
-sudo docker pull postgres
+Desde este directorio:
 
-sudo docker run --name BD -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres
+docker build -t cierzo_database .
+
+docker run --name cierzoDB -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 cierzo_database
 
 Una vez creado y cerrada la termianal si se quiere volver a ejecutar; usar:
 
-sudo docker start BD
+sudo docker start cierzoBD
 
 
 ## Parametros de conexion a la BD [usuarios]

@@ -64,7 +64,8 @@ CREATE TABLE public.Artist
 (
     id SERIAL PRIMARY KEY,
     name VARCHAR(75) NOT NULL,
-    bio TEXT
+    bio TEXT,
+    image BYTEA NOT NULL
 );
 
 CREATE TABLE public.listSong
@@ -95,6 +96,21 @@ CREATE TABLE public.Session
     CONSTRAINT Session_listsong_listid_songid_fk FOREIGN KEY (listid, songid) REFERENCES listsong (listid, songid)
 );
 
+-- TRIGGERS --
+-- Crear lista de favoritos cuando se inserte un usuario --
+
+CREATE FUNCTION create_fav_list() RETURNS TRIGGER AS $create_fav_list$
+  BEGIN
+    INSERT INTO list (name, userid, creationdate, description)
+      VALUES ('Favoritos', (SELECT id FROM "User" WHERE email = NEW.email), current_date, 'Tu música favorita');
+    RETURN NEW;
+  END;
+$create_fav_list$ LANGUAGE plpgsql;
+
+CREATE TRIGGER create_fav_list AFTER INSERT ON "User"
+  FOR EACH ROW EXECUTE PROCEDURE create_fav_list();
+
+-- ROLES --
 -- Creado el rol de escritura y lectura
 CREATE ROLE read_write LOGIN PASSWORD 'PasswordReadWrite';
 
