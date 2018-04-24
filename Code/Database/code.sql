@@ -1,130 +1,136 @@
-CREATE TABLE public."User"
+CREATE TABLE "User"
 (
-				id SERIAL PRIMARY KEY,
-    username VARCHAR(75) NOT NULL,
-    email VARCHAR(75) NOT NULL,
-    name VARCHAR(200),
-    bio TEXT,
-    password VARCHAR(200) NOT NULL
-);
-CREATE UNIQUE INDEX User_email_uindex ON public."User" (email);
-CREATE UNIQUE INDEX User_username_uindex ON public."User" (username);
-
-CREATE TABLE public.Follower
-(
-    userID INT NOT NULL,
-    followedID INT NOT NULL,
-    CONSTRAINT follower_userid_followedid_pk PRIMARY KEY (userid, followedid),
-    CONSTRAINT Follower__fk_uid FOREIGN KEY (userID) REFERENCES "User" (id),
-    CONSTRAINT Follower__fk_fid FOREIGN KEY (followedID) REFERENCES "User" (id)
+  id       SERIAL       NOT NULL,
+  username VARCHAR(75)  NOT NULL,
+  email    VARCHAR(75)  NOT NULL,
+  name     VARCHAR(200),
+  bio      TEXT,
+  password VARCHAR(200) NOT NULL,
+  CONSTRAINT "User_pkey"
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE public.List
+CREATE UNIQUE INDEX user_username_uindex
+  ON "User" (username);
+
+CREATE UNIQUE INDEX user_email_uindex
+  ON "User" (email);
+
+CREATE TABLE list
 (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(75) NOT NULL,
-    userid INT NOT NULL,
-    creationdate DATE NOT NULL,
-    description TEXT NULL,
-    CONSTRAINT List_User_id_fk FOREIGN KEY (userid) REFERENCES "User" (id)
+  id           SERIAL      NOT NULL,
+  name         VARCHAR(75) NOT NULL,
+  userid       INTEGER     NOT NULL,
+  creationdate DATE        NOT NULL,
+  description  TEXT,
+  CONSTRAINT list_pkey
+  PRIMARY KEY (id),
+  CONSTRAINT list_user_id_fk
+  FOREIGN KEY (userid) REFERENCES "User"
 );
 
-CREATE TABLE public."Group"
+CREATE TABLE author
 (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(75) NOT NULL,
-    bio TEXT
+  id   SERIAL      NOT NULL,
+  name VARCHAR(75) NOT NULL,
+  bio  TEXT,
+  CONSTRAINT author_pkey
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE public.Album
+CREATE TABLE artist
 (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(75) NOT NULL,
-    groupid INT NOT NULL,
-    publishDate DATE NOT NULL,
-    description TEXT,
-    image BYTEA NOT NULL,
-    CONSTRAINT Album_Group_id_fk FOREIGN KEY (groupid) REFERENCES "Group" (id)
+  authorid INTEGER NOT NULL,
+  image    BYTEA,
+  CONSTRAINT artist_pkey
+  PRIMARY KEY (authorid),
+  CONSTRAINT artist_author_id_fk
+  FOREIGN KEY (authorid) REFERENCES author
 );
 
-CREATE TABLE public.Song
+CREATE TABLE "group"
 (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(75) NOT NULL,
-    genre VARCHAR(150) NOT NULL,
-    file BYTEA NOT NULL,
-    lenght INT,
-    groupID INT NOT NULL,
-    albumID INT NOT NULL,
-    CONSTRAINT Song_Group_id_fk FOREIGN KEY (groupID) REFERENCES "Group" (id),
-    CONSTRAINT Song_album_id_fk FOREIGN KEY (albumID) REFERENCES album (id)
+  authorid INTEGER NOT NULL,
+  CONSTRAINT group_pkey
+  PRIMARY KEY (authorid),
+  CONSTRAINT group_author_id_fk
+  FOREIGN KEY (authorid) REFERENCES author
 );
 
-CREATE TABLE public.Artist
+CREATE TABLE component
 (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(75) NOT NULL,
-    bio TEXT,
-    image BYTEA NOT NULL
+  groupid  INTEGER NOT NULL,
+  artistid INTEGER NOT NULL,
+  CONSTRAINT component_groupid_artistid_pk
+  PRIMARY KEY (groupid, artistid),
+  CONSTRAINT component_group_authorid_fk
+  FOREIGN KEY (groupid) REFERENCES "group",
+  CONSTRAINT component_artist_authorid_fk
+  FOREIGN KEY (artistid) REFERENCES artist
 );
 
-CREATE TABLE public.listSong
+CREATE TABLE song
 (
-    listID INT NOT NULL,
-    songID INT NOT NULL,
-    CONSTRAINT listSong_listID_songID_pk PRIMARY KEY (listID, songID),
-    CONSTRAINT listSong_list_id_fk FOREIGN KEY (listID) REFERENCES list (id),
-    CONSTRAINT listSong_song_id_fk FOREIGN KEY (songID) REFERENCES song (id)
+  id      SERIAL      NOT NULL,
+  name    VARCHAR(75) NOT NULL,
+  file    BYTEA       NOT NULL,
+  lenght  INTEGER     NOT NULL,
+  albumid INTEGER,
+  CONSTRAINT song_pkey
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE public.Components
+CREATE TABLE listsong
 (
-    GroupID INT NOT NULL,
-    ArtistID INT NOT NULL,
-    CONSTRAINT Components_GroupID_ArtistID_pk PRIMARY KEY (GroupID, ArtistID),
-    CONSTRAINT Components_Group_id_fk FOREIGN KEY (GroupID) REFERENCES "Group" (id),
-    CONSTRAINT Components_artist_id_fk FOREIGN KEY (ArtistID) REFERENCES artist (id)
+  listid INTEGER NOT NULL,
+  songid INTEGER NOT NULL,
+  CONSTRAINT listsong_listid_songid_pk
+  PRIMARY KEY (listid, songid),
+  CONSTRAINT listsong_list_id_fk
+  FOREIGN KEY (listid) REFERENCES list,
+  CONSTRAINT listsong_song_id_fk
+  FOREIGN KEY (songid) REFERENCES song
 );
 
-CREATE TABLE public.Session
+CREATE TABLE album
 (
-    id SERIAL PRIMARY KEY,
-    userid INT NOT NULL,
-    listid INT NOT NULL,
-    songid INT NOT NULL,
-    time INT NOT NULL,
-    CONSTRAINT Session_listsong_listid_songid_fk FOREIGN KEY (listid, songid) REFERENCES listsong (listid, songid)
+  id          SERIAL      NOT NULL,
+  name        VARCHAR(75) NOT NULL,
+  publishdate DATE,
+  authorid    INTEGER     NOT NULL,
+  description TEXT,
+  image       BYTEA,
+  CONSTRAINT album_pkey
+  PRIMARY KEY (id),
+  CONSTRAINT album_author_id_fk
+  FOREIGN KEY (authorid) REFERENCES author
 );
 
--- TRIGGERS --
--- Crear lista de favoritos cuando se inserte un usuario --
+ALTER TABLE song
+  ADD CONSTRAINT song_album_id_fk
+FOREIGN KEY (albumid) REFERENCES album;
 
-CREATE FUNCTION create_fav_list() RETURNS TRIGGER AS $create_fav_list$
-  BEGIN
-    INSERT INTO list (name, userid, creationdate, description)
-      VALUES ('Favoritos', (SELECT id FROM "User" WHERE email = NEW.email), current_date, 'Tu música favorita');
-    RETURN NEW;
-  END;
-$create_fav_list$ LANGUAGE plpgsql;
+CREATE TABLE genre
+(
+  name   VARCHAR(75) NOT NULL,
+  songid INTEGER     NOT NULL,
+  CONSTRAINT genre_name_songid_pk
+  PRIMARY KEY (name, songid),
+  CONSTRAINT genre_song_id_fk
+  FOREIGN KEY (songid) REFERENCES song
+);
 
-CREATE TRIGGER create_fav_list AFTER INSERT ON "User"
-  FOR EACH ROW EXECUTE PROCEDURE create_fav_list();
-  
-  
- -- DELETEAR USUARIO --
-
-CREATE FUNCTION del_user_info() RETURNS TRIGGER AS $del_user_info$
-  BEGIN
-    DELETE FROM session WHERE userid = old.id;
-    DELETE FROM follower WHERE userid = old.id OR followedid = old.id;
-    DELETE FROM listsong WHERE listid IN (SELECT id FROM list WHERE userid = old.id);
-    DELETE FROM list WHERE userid = old.id;
-    RETURN old;
-  END;
-$del_user_info$ LANGUAGE plpgsql;
-
-CREATE TRIGGER del_user_info BEFORE DELETE ON "User"
-  FOR EACH ROW EXECUTE PROCEDURE del_user_info(); 
+CREATE TABLE follower
+(
+  userid     INTEGER NOT NULL,
+  followedid INTEGER NOT NULL,
+  CONSTRAINT follower_userid_followedid_pk
+  PRIMARY KEY (userid, followedid),
+  CONSTRAINT follower__fk_uid
+  FOREIGN KEY (userid) REFERENCES "User",
+  CONSTRAINT follower__fk_fid
+  FOREIGN KEY (followedid) REFERENCES "User"
+);
 
 -- ROLES --
 -- Creado el rol de escritura y lectura

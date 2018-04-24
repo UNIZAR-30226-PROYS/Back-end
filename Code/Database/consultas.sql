@@ -1,19 +1,26 @@
 --usuario dado su identificador
-SELECT id, username, email, name, bio, password FROM "User" WHERE id = ?;
---// Esta consultas es lo mismo que SELECT * FROM "User" WHERE id = ?;
---// pero te la pongo asi por si tuvieras que sacar solo un parametro
+SELECT get_user_by_id(id INT); -- RETURNS full user
 
 --Lista de usuarios que sigue el usuario dado
-SELECT u.id, u.username, u.email, u.name, u.bio, u.password FROM "User" u, follower f WHERE u.id = f.followedid AND f.userid = ? LIMIT ? OFFSET ?;
+SELECT get_followed_by_user(id INT, limit INT, offset INT); --RETURNS id, nick, name, bio
 
 --Lista de usuarios que siguen a un usuario dado
-SELECT u.id, u.username, u.email, u.name, u.bio, u.password FROM "User" u, follower f WHERE u.id = f.userid AND f.followedid = ? LIMIT ? OFFSET ?;
+SELECT get_followers_by_user(id INT, limit INT, offset INT);  --RETURNS id, nick, name, bio
 
 --Listas de playLists de un usuario dado
-SELECT id, name, userid, creationdate, description FROM list WHERE userid = ? LIMIT ? OFFSET ?;
+SELECT get_list_by_ownerid(id INT, limit INT, offset INT); -- RETURNS full list info
 
 --Lista de playLists dado su id
-SELECT id, name, userid, creationdate, description FROM list WHERE id = ? LIMIT ? OFFSET ?;
+SELECT get_list_by_id(id INT); --retuns 1 list item info
+
+--Obtener albunes dado año de lanzamiento
+SELECT get_album_by_publish_year(year INT, limit INT, offset INT);
+
+-- Obtener albunes dado un nombre. name must gone 'text'
+SELECT get_album_by_name(name VARCHAR(75), limit INT, offset INT);
+
+-- Obtener el nombre de un autor dado su id
+SELECT get_author_name_by_id(id INT); -- RETURNS VARCHAR(75)
 
 --Objener imagen de un album dado su identificador
 SELECT image FROM album WHERE id = ?;
@@ -24,11 +31,13 @@ SELECT a.image FROM album a, song s WHERE a.id = s.albumid AND s.id = ?;
 -- Obtener fichero de audio de una cancion dado un id
 SELECT file FROM song WHERE id = ?;
 
---Obtener albunes dado año de lanzamiento
-SELECT id, name, groupid, publishdate, description, image FROM album WHERE EXTRACT(YEAR FROM publishdate) = ? LIMIT ? OFFSET ?;
+------------------------------------------------------
+--Lista de autores dado el nombre
+SELECT get_authors_by_name(name VARCHAR(75), limit INT, offset INT);
 
--- Obtener albunes dado un nombre. El nombre debe ir '%nombre%'
-SELECT id, name, groupid, publishdate, description, image FROM album WHERE name LIKE ? LIMIT ? OFFSET ?;
+-- Lista de usuarios dado parametros
+SELECT get_users_by_parameter(searchquery VARCHAR(75), limit INT, offset INT);
+
 
 -- Obtener lista de albunes dado un autor
 SELECT a.id, a.name, a.groupid, a.publishdate, a.description, a.image FROM album a, components c, "Group" g WHERE a.groupid = g.id AND g.id = c.groupid AND c.artistid = ? LIMIT ? OFFSET ?;
@@ -48,9 +57,3 @@ WHERE c.groupid = g.id AND g.id = cp.groupid AND cp.artistid = a.id AND a.id = ?
 SELECT c.id, c.name, c.genre, c.file, c.lenght, c.groupid, c.albumid
 FROM song c, "Group" g, components cp, artist a
 WHERE c.groupid = g.id AND g.id = ? LIMIT ? OFFSET ?;
-
---Lista de autores dado el nombre
-SELECT id, name, bio FROM artist WHERE name = ? LIMIT ? OFFSET ?;
-
--- Lista de usuarios dado parametros
-SELECT id, username, email, name, bio, password FROM "User" WHERE name = ? OR username = ? LIMIT ? OFFSET ?;
