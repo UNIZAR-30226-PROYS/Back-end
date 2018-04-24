@@ -51,7 +51,7 @@ CREATE TABLE public.Song
 (
     id SERIAL PRIMARY KEY,
     name VARCHAR(75) NOT NULL,
-    genre VARCHAR(75) NOT NULL,
+    genre VARCHAR(150) NOT NULL,
     file BYTEA NOT NULL,
     lenght INT,
     groupID INT NOT NULL,
