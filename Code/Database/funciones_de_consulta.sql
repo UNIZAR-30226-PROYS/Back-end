@@ -12,7 +12,7 @@ CREATE FUNCTION get_followed_by_user(id INT, lim INT, ofset INT) RETURNS SETOF u
     WHERE u.id = f.followedid AND f.userid = $1
     LIMIT $2
     OFFSET $3;
-  $$ LANGUAGE sq
+  $$ LANGUAGE sql;
   
 CREATE FUNCTION get_followers_by_user(id INT, lim INT, ofset INT) RETURNS SETOF user_public_info AS
   $$
