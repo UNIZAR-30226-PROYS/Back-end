@@ -11,6 +11,8 @@ from swagger_server.models.sign_up_item import SignUpItem  # noqa: E501
 from swagger_server.models.song_item import SongItem  # noqa: E501
 from swagger_server import util
 
+#from sqlalchemy import func
+from swagger_server.database import db, engine
 
 def create_account(signupItem=None):  # noqa: E501
     """crea cuenta de usuario
@@ -107,7 +109,11 @@ def get_profile(profileID):  # noqa: E501
 
     :rtype: ProfileItem
     """
-    return 'do some magic!'
+
+    sql = "SELECT * FROM get_user_by_id( {} )".format(profileID)
+    query = engine.execute(sql)
+    datos = query.first()
+    return ProfileItem(datos['id'],datos['username'],datos['name'])
 
 
 def get_song(songID):  # noqa: E501
