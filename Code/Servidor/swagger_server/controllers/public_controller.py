@@ -11,8 +11,7 @@ from swagger_server.models.sign_up_item import SignUpItem  # noqa: E501
 from swagger_server.models.song_item import SongItem  # noqa: E501
 from swagger_server import util
 
-#from sqlalchemy import func
-from swagger_server.database import db, engine
+from swagger_server.database import engine
 
 def create_account(signupItem=None):  # noqa: E501
     """crea cuenta de usuario
@@ -26,7 +25,22 @@ def create_account(signupItem=None):  # noqa: E501
     """
     if connexion.request.is_json:
         signupItem = SignUpItem.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    search = search_profiles('', signupItem.username, 0, 1)
+    if search.__len__() != 0:
+        return 'Username used', 400
+
+    sql = "SELECT * FROM insert_new_user( '{}', '{}', '{}' , '{}'); COMMIT;"\
+        .format(signupItem.username, signupItem.mail, signupItem.name, 'abc')
+    engine.execute(sql)
+
+    search = search_profiles(SignUpItem.name, signupItem.username, 0, 1)
+    if search.__len__() == 0:
+        return 'Error inserting', 400
+    inserted = search[0]
+
+    return AccountItem(inserted.id, inserted.username, inserted.name, inserted.bio,
+                       signupItem.mail, inserted.friends, inserted.playlists)
 
 
 def get_album(albumID):  # noqa: E501
@@ -113,7 +127,10 @@ def get_profile(profileID):  # noqa: E501
     sql = "SELECT * FROM get_user_by_id( {} )".format(profileID)
     query = engine.execute(sql)
     datos = query.first()
-    return ProfileItem(datos['id'],datos['username'],datos['name'])
+    if datos['id'] is None:
+        return 'Not found', 404
+
+    return ProfileItem(datos['id'], datos['username'], datos['name'])
 
 
 def get_song(songID):  # noqa: E501
@@ -225,7 +242,7 @@ def search_playlist(name=None, owner=None, skip=None, limit=None):  # noqa: E501
     return 'do some magic!'
 
 
-def search_profiles(name=None, username=None, skip=None, limit=None):  # noqa: E501
+def search_profiles(name=None, username=None, skip=0, limit=10):  # noqa: E501
     """busca usuarios con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve usuarios que se ajusten a ellos.  # noqa: E501
@@ -241,7 +258,22 @@ def search_profiles(name=None, username=None, skip=None, limit=None):  # noqa: E
 
     :rtype: List[ProfileItem]
     """
-    return 'do some magic!'
+
+    sql = """SELECT *
+            FROM (SELECT *
+                    FROM get_users_by_parameter('{}', 100000, 0) name
+                UNION
+                SELECT *
+                    FROM get_users_by_parameter('{}', 100000, 0) username
+                ) found
+            LIMIT {}
+            OFFSET {};""".format(name, username, limit, skip)
+    query = engine.execute(sql)
+    found = []
+    for item in query:
+        profile = ProfileItem(item['id'], item['username'], item['name'])
+        found.append(profile)
+    return found
 
 
 def search_song(name=None, author=None, genre=None, skip=None, limit=None):  # noqa: E501
