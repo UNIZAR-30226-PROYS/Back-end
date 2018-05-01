@@ -13,6 +13,8 @@ from swagger_server import util
 
 from flask import session
 from swagger_server.database import engine
+import swagger_server.authentificator as auth
+
 
 def create_account(signupItem=None):  # noqa: E501
     """crea cuenta de usuario
@@ -40,7 +42,7 @@ def create_account(signupItem=None):  # noqa: E501
         return 'Error inserting', 400
     inserted = search[0]
 
-    session['userid'] = inserted.id
+    auth.sign_in(inserted.id)
 
     return AccountItem(inserted.id, inserted.username, inserted.name, inserted.bio,
                        signupItem.mail, inserted.friends, inserted.playlists)
@@ -197,7 +199,7 @@ def login(loginItem=None):  # noqa: E501
     if usuario['password'] != loginItem._pass:
         return 'Wrong authentification', 400
 
-    session['userid'] = usuario['id']
+    auth.sign_in(usuario['id'])
 
     return AccountItem(usuario['id'],usuario['username'],usuario['name'],usuario['bio'],usuario['email'])
 

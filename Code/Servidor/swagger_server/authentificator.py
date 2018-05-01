@@ -1,4 +1,4 @@
-from Flask import session
+from flask import session
 
 
 def sign_in(userid):
@@ -32,7 +32,7 @@ def enforce_auth(func):
 
 def enforce_user(func, userid):
     def inner(*args, **kwargs):
-        if 'userid' not in session or session['userid'] == userid:
+        if 'userid' not in session or session['userid'] != userid:
             return 'Forbidden for this user', 403
         return func(*args, **kwargs)
     return inner
@@ -41,6 +41,6 @@ def enforce_user(func, userid):
 def enforce_admin(func):
     def inner(*args, **kwargs):
         if 'admin' not in session:
-            return 'Forbidden for this non-admins', 403
+            return 'Forbidden for non-admins', 403
         return func(*args, **kwargs)
     return inner
