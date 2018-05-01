@@ -120,7 +120,7 @@ def logout():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    auth.sign_out()
 
 
 @auth.enforce_auth
