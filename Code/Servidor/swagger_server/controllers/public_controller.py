@@ -41,7 +41,6 @@ def create_account(signupItem=None):  # noqa: E501
     inserted = search[0]
 
     session['userid'] = inserted.id
-    session['username'] = inserted.username
 
     return AccountItem(inserted.id, inserted.username, inserted.name, inserted.bio,
                        signupItem.mail, inserted.friends, inserted.playlists)
@@ -189,11 +188,18 @@ def login(loginItem=None):  # noqa: E501
     if connexion.request.is_json:
         loginItem = LoginItem.from_dict(connexion.request.get_json())  # noqa: E501
 
-    search = search_profiles(username=loginpItem.username)
-    if search.__len__() == 0:
+    sql = "SELECT * FROM get_user_by_mail( '{}' )".format(loginItem.mail)
+    query = engine.execute(sql)
+    usuario = query.first()
+    if usuario['id'] is None:
         return 'Username non existant', 400
 
-    return AccountItem()
+    if usuario['password'] != loginItem._pass:
+        return 'Wrong authentification', 400
+
+    session['userid'] = usuario['id']
+
+    return AccountItem(usuario['id'],usuario['username'],usuario['name'],usuario['bio'],usuario['email'])
 
 
 def search_album(name=None, author=None, skip=None, limit=None):  # noqa: E501
