@@ -9,7 +9,9 @@ from swagger_server.models.playlist_item_new import PlaylistItemNew  # noqa: E50
 from swagger_server.models.session_item import SessionItem  # noqa: E501
 from swagger_server import util
 
+import swagger_server.authentificator as auth
 
+@auth.enforce_auth
 def add_playlist(playlistItem=None):  # noqa: E501
     """crea una lista de reproducción
 
@@ -25,6 +27,7 @@ def add_playlist(playlistItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def add_playlist_song(playlistID, songID=None):  # noqa: E501
     """añade una canción a una lista de reproducción
 
@@ -40,6 +43,7 @@ def add_playlist_song(playlistID, songID=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def delete_account():  # noqa: E501
     """borra la cuenta del usuario
 
@@ -51,6 +55,7 @@ def delete_account():  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def delete_playlist(playlistID):  # noqa: E501
     """elimina una playlist
 
@@ -64,6 +69,7 @@ def delete_playlist(playlistID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def delete_playlist_song(playlistID, songID):  # noqa: E501
     """elimina una canción de una playlist identificada por playlistID
 
@@ -79,6 +85,7 @@ def delete_playlist_song(playlistID, songID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def follow_profile(profileID):  # noqa: E501
     """comienza a seguir al usuario identificado por profileID
 
@@ -92,6 +99,7 @@ def follow_profile(profileID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def get_account():  # noqa: E501
     """devuelve la información de la cuenta del usuario
 
@@ -103,6 +111,7 @@ def get_account():  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def logout():  # noqa: E501
     """cierra sesión de usuario
 
@@ -114,6 +123,7 @@ def logout():  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def restore_session():  # noqa: E501
     """devuelve información de sincronización de canciones
 
@@ -125,6 +135,7 @@ def restore_session():  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def save_session(sessionItem=None):  # noqa: E501
     """guarda información de sincronización de canciones
 
@@ -140,6 +151,7 @@ def save_session(sessionItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def unfollow_profile(profileID):  # noqa: E501
     """deja de seguir al usuario identificado por profileID
 
@@ -153,6 +165,7 @@ def unfollow_profile(profileID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def update_account(accountItem=None):  # noqa: E501
     """actualiza información de cuenta de usuario
 
@@ -168,6 +181,7 @@ def update_account(accountItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def update_account_credentials(loginItem=None):  # noqa: E501
     """modifica credenciales de acceso de cuenta de usuario
 
@@ -183,6 +197,7 @@ def update_account_credentials(loginItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
 def update_playlist(playlistID, playlistItem=None):  # noqa: E501
     """actualiza la información de una playlist
 

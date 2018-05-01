@@ -7,7 +7,11 @@ from swagger_server.models.song_item import SongItem  # noqa: E501
 from swagger_server.models.song_item_new import SongItemNew  # noqa: E501
 from swagger_server import util
 
+import swagger_server.authentificator as auth
 
+
+@auth.enforce_auth
+@auth.enforce_admin
 def add_album(albumItem=None):  # noqa: E501
     """crea un álbum
 
@@ -23,6 +27,8 @@ def add_album(albumItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def add_album_song(albumID, songID=None):  # noqa: E501
     """añade una canción a un album
 
@@ -38,6 +44,8 @@ def add_album_song(albumID, songID=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def add_song(songItem=None):  # noqa: E501
     """añade una canción
 
@@ -53,6 +61,8 @@ def add_song(songItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def delete_album(albumID):  # noqa: E501
     """elimina un álbum
 
@@ -66,6 +76,8 @@ def delete_album(albumID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def delete_album_image(albumID):  # noqa: E501
     """elimina la carátula de un álbum
 
@@ -79,6 +91,8 @@ def delete_album_image(albumID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def delete_author_image(authorID):  # noqa: E501
     """elimina la imagen de un autor
 
@@ -92,6 +106,8 @@ def delete_author_image(authorID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def delete_song(songID):  # noqa: E501
     """elimina una canción
 
@@ -105,6 +121,8 @@ def delete_song(songID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def delete_song_file(songID):  # noqa: E501
     """elimina el archivo de audio de una canción
 
@@ -118,6 +136,8 @@ def delete_song_file(songID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def delete_song_image(songID):  # noqa: E501
     """elimina la carátula de una canción
 
@@ -131,6 +151,8 @@ def delete_song_image(songID):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def update_song(songID, songItem=None):  # noqa: E501
     """actualiza la información de una canción
 
@@ -148,6 +170,8 @@ def update_song(songID, songItem=None):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def upload_album_image(albumID, albumImage):  # noqa: E501
     """carga la carátula de un álbum
 
@@ -163,6 +187,8 @@ def upload_album_image(albumID, albumImage):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def upload_author_image(authorID, authorImage):  # noqa: E501
     """carga la imagen e un autor
 
@@ -178,6 +204,8 @@ def upload_author_image(authorID, authorImage):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def upload_song_file(songID, songFile):  # noqa: E501
     """carga el archivo de audio de una canción
 
@@ -193,6 +221,8 @@ def upload_song_file(songID, songFile):  # noqa: E501
     return 'do some magic!'
 
 
+@auth.enforce_auth
+@auth.enforce_admin
 def upload_song_image(songID, songImage):  # noqa: E501
     """carga la carátula de una canción
 
