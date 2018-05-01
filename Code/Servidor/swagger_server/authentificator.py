@@ -30,12 +30,14 @@ def enforce_auth(func):
     return inner
 
 
-def enforce_user(func, userid):
-    def inner(*args, **kwargs):
-        if 'userid' not in session or session['userid'] != userid:
-            return 'Forbidden for this user', 403
-        return func(*args, **kwargs)
-    return inner
+def enforce_user(userid):
+    def wraper(func):
+        def inner(*args, **kwargs):
+            if 'userid' not in session or session['userid'] != userid:
+                return 'Forbidden for this user', 403
+            return func(*args, **kwargs)
+        return inner
+    return wraper
 
 
 def enforce_admin(func):
