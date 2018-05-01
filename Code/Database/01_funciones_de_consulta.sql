@@ -2,6 +2,17 @@ CREATE FUNCTION get_user_by_id(id INT) RETURNS "User" AS
   $$
     SELECT id, username, email, name, bio, password FROM "User" WHERE id = $1;
   $$ LANGUAGE sql;
+
+CREATE FUNCTION get_user_by_username(username VARCHAR(75)) RETURNS "User" AS
+  $$
+    SELECT id, username, email, name, bio, password FROM "User" WHERE username = $1;
+  $$ LANGUAGE sql;
+
+
+CREATE FUNCTION get_user_by_mail(mail VARCHAR(75)) RETURNS "User" AS
+  $$
+    SELECT id, username, email, name, bio, password FROM "User" WHERE email = $1;
+  $$ LANGUAGE sql;
   
 CREATE type user_public_info as (id int, username VARCHAR(75), name VARCHAR(200), bio TEXT);
 
@@ -48,6 +59,15 @@ CREATE FUNCTION get_album_by_publish_year(year INT, lim INT, ofset INT) RETURNS 
     OFFSET $3;
   $$ LANGUAGE sql;
 
+CREATE FUNCTION get_album_by_id(id INT, lim INT, ofset INT) RETURNS album AS
+  $$
+    SELECT *
+    FROM album
+    WHERE id = $1
+    LIMIT $2
+    OFFSET $3;
+  $$ LANGUAGE sql;
+
 CREATE FUNCTION get_album_by_name(a_name VARCHAR(75), lim INT, ofset INT) RETURNS SETOF album AS
   $$
     SELECT *
@@ -56,7 +76,16 @@ CREATE FUNCTION get_album_by_name(a_name VARCHAR(75), lim INT, ofset INT) RETURN
     LIMIT lim
     OFFSET ofset;
   $$ LANGUAGE sql;
- 
+
+CREATE FUNCTION get_album_by_authorid(id INT, lim INT, ofset INT) RETURNS SETOF album AS
+  $$
+    SELECT *
+    FROM album
+    WHERE authorid = $1
+    LIMIT lim
+    OFFSET ofset;
+  $$ LANGUAGE sql;
+
 CREATE FUNCTION get_author_name_by_id(id INT) RETURNS VARCHAR(75) AS
   $$
     SELECT name
@@ -64,13 +93,20 @@ CREATE FUNCTION get_author_name_by_id(id INT) RETURNS VARCHAR(75) AS
     WHERE id = $1;
   $$ LANGUAGE sql;
   
-CREATE FUNCTION get_users_by_parameter(query VARCHAR(75), lim INT, ofset INT) RETURNS SETOF user_public_info AS
+CREATE FUNCTION get_users_by_name(query VARCHAR(75), lim INT, ofset INT) RETURNS SETOF user_public_info AS
   $$
     SELECT id, username, name, bio
     FROM "User"
     WHERE name ILIKE '%' || query || '%'
-          OR
-          username ILIKE '%' || query || '%'
+    LIMIT lim
+    OFFSET ofset;
+  $$ LANGUAGE sql;
+
+CREATE FUNCTION get_users_by_username(query VARCHAR(75), lim INT, ofset INT) RETURNS SETOF user_public_info AS
+  $$
+    SELECT id, username, name, bio
+    FROM "User"
+    WHERE username ILIKE '%' || query || '%'
     LIMIT lim
     OFFSET ofset;
   $$ LANGUAGE sql;
@@ -80,15 +116,6 @@ CREATE FUNCTION get_authors_by_name(query VARCHAR(75), lim INT, ofset INT) RETUR
     SELECT *
     FROM author
     WHERE name ILIKE '%' || query || '%'
-    LIMIT lim
-    OFFSET ofset;
-  $$ LANGUAGE sql;
-  
-CREATE FUNCTION get_album_by_authorid(id INT, lim INT, ofset INT) RETURNS SETOF album AS
-  $$
-    SELECT *
-    FROM album
-    WHERE authorid = $1
     LIMIT lim
     OFFSET ofset;
   $$ LANGUAGE sql;

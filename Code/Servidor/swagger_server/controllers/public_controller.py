@@ -188,7 +188,12 @@ def login(loginItem=None):  # noqa: E501
     """
     if connexion.request.is_json:
         loginItem = LoginItem.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    search = search_profiles(username=loginpItem.username)
+    if search.__len__() == 0:
+        return 'Username non existant', 400
+
+    return AccountItem()
 
 
 def search_album(name=None, author=None, skip=None, limit=None):  # noqa: E501
@@ -265,10 +270,10 @@ def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: 
 
     sql = """SELECT *
             FROM (SELECT *
-                    FROM get_users_by_parameter('{}', 100000, 0) name
+                    FROM get_users_by_name('{}', 100000, 0) name
                 UNION
                 SELECT *
-                    FROM get_users_by_parameter('{}', 100000, 0) username
+                    FROM get_users_by_username('{}', 100000, 0) username
                 ) found
             LIMIT {}
             OFFSET {};""".format(name, username, limit, skip)
