@@ -58,7 +58,17 @@ def get_album(albumID):  # noqa: E501
 
     :rtype: AlbumItem
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM get_album_by_id( {} )".format(albumID)
+    query = engine.execute(sql)
+    datos = query.first()
+    if datos['id'] is None:
+        return 'Not found', 404
+
+    '''sql = "SELECT * FROM get_author_name_by_id( {} )".format(datos['authorid'])
+    query = engine.execute(sql)
+    datos2 = query.first()'''
+
+    return AlbumItem(datos['id'], datos['name'], datos['authorid'], None, datos['publishdate'], datos['description'])
 
 
 def get_album_image(albumID):  # noqa: E501
@@ -115,7 +125,17 @@ def get_playlist(playlistID):  # noqa: E501
 
     :rtype: PlaylistItem
     """
-    return 'do some magic!'
+
+    sql = "SELECT * FROM get_list_by_id( {} )".format(playlistID)
+    query = engine.execute(sql)
+    datos = query.first()
+    if datos['id'] is None:
+        return 'Not found', 404
+
+    sql = "SELECT * FROM get_user_by_id( {} )".format(datos['id'])
+    query = engine.execute(sql)
+    datos2 = query.first()
+    return PlaylistItem(datos['id'], datos['name'], datos['userid'], datos2['name'], datos['creationdate'], datos['description'])
 
 
 def get_profile(profileID):  # noqa: E501

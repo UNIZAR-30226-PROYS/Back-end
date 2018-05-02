@@ -59,13 +59,11 @@ CREATE FUNCTION get_album_by_publish_year(year INT, lim INT, ofset INT) RETURNS 
     OFFSET $3;
   $$ LANGUAGE sql;
 
-CREATE FUNCTION get_album_by_id(id INT, lim INT, ofset INT) RETURNS album AS
+CREATE FUNCTION get_album_by_id(id INT) RETURNS album AS
   $$
     SELECT *
     FROM album
-    WHERE id = $1
-    LIMIT $2
-    OFFSET $3;
+    WHERE id = $1;
   $$ LANGUAGE sql;
 
 CREATE FUNCTION get_album_by_name(a_name VARCHAR(75), lim INT, ofset INT) RETURNS SETOF album AS
