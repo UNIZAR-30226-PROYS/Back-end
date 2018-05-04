@@ -9,6 +9,7 @@ from swagger_server.models.playlist_item import PlaylistItem  # noqa: E501
 from swagger_server.models.profile_item import ProfileItem  # noqa: E501
 from swagger_server.models.sign_up_item import SignUpItem  # noqa: E501
 from swagger_server.models.song_item import SongItem  # noqa: E501
+from swagger_server.models.friend_item import FriendItem  # noqa: E501
 from swagger_server import util
 
 from flask import session
@@ -64,11 +65,20 @@ def get_album(albumID):  # noqa: E501
     if datos['id'] is None:
         return 'Not found', 404
 
-    '''sql = "SELECT * FROM get_author_name_by_id( {} )".format(datos['authorid'])
-    query = engine.execute(sql)
-    datos2 = query.first()'''
+    sql2 = "SELECT * FROM get_author_name_by_id( {} )".format(datos['authorid'])
+    query2 = engine.execute(sql2)
+    datos2 = query2.first()
 
-    return AlbumItem(datos['id'], datos['name'], datos['authorid'], None, datos['publishdate'], datos['description'])
+    sql3 = "SELECT * FROM get_songs_of_album( {} )".format(albumID)
+    query3 = engine.execute(sql3)
+    songs = []
+    for item in query3:
+        song = SongItem(item[0], item[1], item[2], datos['authorid'], datos2[0],
+                        albumID, datos['name'], item[4])
+        songs.append(song)
+
+    return AlbumItem(datos['id'], datos['name'], datos['authorid'], datos2[0], datos['publishdate'],
+                     datos['description'], songs)
 
 
 def get_album_image(albumID):  # noqa: E501
@@ -94,12 +104,32 @@ def get_author(authorID):  # noqa: E501
 
     :rtype: AuthorItem
     """
+    sql = "SELECT * FROM get_author_by_id( {} )".format(authorID)
+    query = engine.execute(sql)
+    datos = query.first()
 
-    if authorID == '4678':
-        author = AuthorItem('4678','Estopa','Los hermanos Muñóz de Cornellá')
-        return author, 200
-    else:
+    if datos['id'] is None:
         return 'Not found', 404
+
+    sql2 = "SELECT * FROM get_album_by_authorid( {} , 10000, 0)".format(authorID)
+    query2 = engine.execute(sql2)
+
+    albums = []
+
+    for item in query2:
+        sql3 = "SELECT * FROM get_songs_of_album( {} )".format(item[0])
+        query3 = engine.execute(sql3)
+
+        songs = []
+
+        for item2 in query3:
+            song = SongItem(item2[0], item2[1], item2[2], authorID, datos['name'], item[0], item[1], item2[4])
+            songs.append(song)
+
+        album = AlbumItem(item[0], item[1], authorID, datos['name'], item[2], item[4], songs)
+        albums.append(album)
+
+    return AuthorItem(datos['id'], datos['name'], datos['bio'], albums)
 
 
 def get_author_image(authorID):  # noqa: E501
@@ -132,10 +162,27 @@ def get_playlist(playlistID):  # noqa: E501
     if datos['id'] is None:
         return 'Not found', 404
 
-    sql = "SELECT * FROM get_user_by_id( {} )".format(datos['id'])
-    query = engine.execute(sql)
-    datos2 = query.first()
-    return PlaylistItem(datos['id'], datos['name'], datos['userid'], datos2['name'], datos['creationdate'], datos['description'])
+    sql2 = "SELECT * FROM get_userinfo_by_id( {} )".format(datos[2])
+    query2 = engine.execute(sql2)
+    datos2 = query2.first()
+
+    sql3 = "SELECT * FROM get_songs_of_list( {} )".format(playlistID)
+    query3 = engine.execute(sql3)
+    songs = []
+    for item in query3:
+        sql4 = "SELECT * FROM get_album_by_id( {} )".format(item[3])
+        query4 = engine.execute(sql4)
+
+        datos4 = query4.first()
+
+        sql5 = "SELECT * FROM get_author_name_by_id( {} )".format(datos4[3])
+        query5 = engine.execute(sql5)
+
+        datos5 = query5.first()
+        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], item[4])
+        songs.append(song)
+
+    return PlaylistItem(datos[0], datos[1], datos[2], datos2[2], datos[3], datos[4], songs)
 
 
 def get_profile(profileID):  # noqa: E501
@@ -149,14 +196,41 @@ def get_profile(profileID):  # noqa: E501
     :rtype: ProfileItem
     """
 
-    sql = "SELECT * FROM get_user_by_id( {} )".format(profileID)
+    sql = "SELECT * FROM get_userinfo_by_id( {} )".format(profileID)
     query = engine.execute(sql)
     datos = query.first()
     if datos['id'] is None:
         return 'Not found', 404
 
-    return ProfileItem(datos['id'], datos['username'], datos['name'])
+    sql2 = "SELECT * FROM get_followed_by_user( {} , 10000, 0)".format(profileID)
+    query2 = engine.execute(sql2)
+    friends = []
+    for item in query2:
+        friend = FriendItem(item[0], item[1], item[2], item[3])
+        friends.append(friend)
 
+    sql3 = "SELECT * FROM get_list_by_ownerid( {} , 10000, 0)".format(profileID)
+    query3 = engine.execute(sql3)
+    lists = []
+    for item in query3:
+        sql4 = "SELECT * FROM get_songs_of_list( {} )".format(item[0])
+        query4 = engine.execute(sql4)
+        songs = []
+        for item2 in query4:
+            sql5 = "SELECT * FROM get_album_by_id( {} )".format(item2[3])
+            query5 = engine.execute(sql5)
+
+            datos5 = query5.first()
+
+            sql6 = "SELECT * FROM get_author_name_by_id( {} )".format(datos5[3])
+            query6 = engine.execute(sql6)
+
+            datos6 = query6.first()
+            song = SongItem(item2[0], item2[1], item2[2], datos5[3], datos6[0], item2[3], datos5[1], item2[4])
+            songs.append(song)
+        list = PlaylistItem(item[0], item[1], item[2], datos[2], item[3], item[4], songs)
+        lists.append(list)
+    return ProfileItem(datos[0], datos[1], datos[2], datos[3], friends, lists)
 
 def get_song(songID):  # noqa: E501
     """obtiene información de una canción
@@ -168,7 +242,25 @@ def get_song(songID):  # noqa: E501
 
     :rtype: SongItem
     """
-    return 'do some magic!'
+
+    sql = "SELECT * FROM get_songinfo_by_id( {} )".format(songID)
+    query = engine.execute(sql)
+    datos = query.first()
+    if datos['id'] is None:
+        return 'Not found', 404
+
+    sql2 = "SELECT * FROM get_album_by_id( {} )".format(datos[3])
+    query2 = engine.execute(sql2)
+
+    datos2 = query2.first()
+
+    sql3 = "SELECT * FROM get_author_name_by_id( {} )".format(datos2[3])
+    query3 = engine.execute(sql3)
+
+    datos3 = query3.first()
+
+    return SongItem(datos[0], datos[1], datos[2], datos2[3], datos3[0], datos[3], datos2[1], datos[4])
+
 
 
 def get_song_file(songID):  # noqa: E501
@@ -221,10 +313,10 @@ def login(loginItem=None):  # noqa: E501
 
     auth.sign_in(usuario['id'])
 
-    return AccountItem(usuario['id'],usuario['username'],usuario['name'],usuario['bio'],usuario['email'])
+    return AccountItem(usuario['id'], usuario['username'], usuario['name'], usuario['bio'], usuario['email'])
 
 
-def search_album(name=None, author=None, skip=None, limit=None):  # noqa: E501
+def search_album(name='*****', author='*****', skip=0, limit=10):  # noqa: E501
     """busca álbunes con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve álbunes que se ajusten a ellos  # noqa: E501
@@ -240,10 +332,26 @@ def search_album(name=None, author=None, skip=None, limit=None):  # noqa: E501
 
     :rtype: List[AlbumItem]
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM search_album( '{}' , '{}' , {} , {} )".format(name, author, limit, skip)
+    query = engine.execute(sql)
+    albums = []
+    for item in query:
+        sql2 = "SELECT * FROM get_author_name_by_id( {} )".format(item[3])
+        query2 = engine.execute(sql2)
+        datos = query2.first()
+
+        sql3 = "SELECT * FROM get_songs_of_album( {} )".format(item[0])
+        query3 = engine.execute(sql3)
+        songs = []
+        for item2 in query3:
+            song = SongItem(item2[0], item2[1], item2[2], item[3], datos[0], item[0], item[1], item2[4])
+            songs.append(song)
+        album = AlbumItem(item[0], item[1], item[3], datos[0], item[2], item[4])
+        albums.append(album)
+    return albums
 
 
-def search_authors(name=None, skip=None, limit=None):  # noqa: E501
+def search_authors(name='*****', skip=0, limit=10):  # noqa: E501
     """busca autores con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve autores que se ajusten a ellos  # noqa: E501
@@ -257,10 +365,28 @@ def search_authors(name=None, skip=None, limit=None):  # noqa: E501
 
     :rtype: List[AuthorItem]
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM search_author( '{}' , {} , {} )".format(name, limit, skip)
+    query = engine.execute(sql)
+    authors = []
+    for item in query:
+        sql2 = "SELECT * FROM get_album_by_authorid( {} ,10000, 0)".format(item[0])
+        query2 = engine.execute(sql2)
+        albums = []
+        for item2 in query2:
+            sql3 = "SELECT * FROM get_songs_of_album( {} )".format(item2[0])
+            query3 = engine.execute(sql3)
+            songs = []
+            for item3 in query3:
+                song = SongItem(item3[0], item3[1], item3[2], item[0], item[1], item2[0], item2[1], item3[4])
+                songs.append(song)
+            album = AlbumItem(item2[0], item2[1], item[0], item[1], item2[2], item2[4], songs)
+            albums.append(album)
+        author = AuthorItem(item[0], item[1], item[2], albums)
+        authors.append(author)
+    return authors
 
 
-def search_playlist(name=None, owner=None, skip=None, limit=None):  # noqa: E501
+def search_playlist(name='*****', owner='*****', skip=0, limit=10):  # noqa: E501
     """busca listas de reproducción con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve listas de reproducción que se ajusten a ellos  # noqa: E501
@@ -276,7 +402,33 @@ def search_playlist(name=None, owner=None, skip=None, limit=None):  # noqa: E501
 
     :rtype: List[PlaylistItem]
     """
-    return 'do some magic!'
+
+    sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
+    query = engine.execute(sql)
+    lists = []
+    for item in query:
+        sql2 = "SELECT * FROM get_userinfo_by_id( {} )".format(item[2])
+        query2 = engine.execute(sql2)
+        datos2 = query2.first()
+
+        sql4 = "SELECT * FROM get_songs_of_list( {} )".format(item[0])
+        query4 = engine.execute(sql4)
+        songs = []
+        for item3 in query4:
+            sql5 = "SELECT * FROM get_album_by_id( {} )".format(item3[3])
+            query5 = engine.execute(sql5)
+            datos5 = query5.first()
+
+            sql6 = "SELECT * FROM get_author_name_by_id( {} )".format(datos5[3])
+            query6 = engine.execute(sql6)
+            datos6 = query6.first()
+
+            song = SongItem(item3[0], item3[1], item3[2], datos5[3], datos6[0], item3[3], datos5[1], item3[4])
+            songs.append(song)
+
+        playlist = PlaylistItem(item[0], item[1], item[2], datos2[2], item[3], item[4], songs)
+        lists.append(playlist)
+    return lists
 
 
 def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: E501
@@ -295,25 +447,46 @@ def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: 
 
     :rtype: List[ProfileItem]
     """
-
-    sql = """SELECT *
-            FROM (SELECT *
-                    FROM get_users_by_name('{}', 100000, 0) name
-                UNION
-                SELECT *
-                    FROM get_users_by_username('{}', 100000, 0) username
-                ) found
-            LIMIT {}
-            OFFSET {};""".format(name, username, limit, skip)
+    sql = "SELECT * FROM search_users( '{}' , '{}' , {}, {} )".format(name, username, limit, skip)
     query = engine.execute(sql)
-    found = []
+    users = []
+
     for item in query:
-        profile = ProfileItem(item['id'], item['username'], item['name'])
-        found.append(profile)
-    return found
+        sql2 = "SELECT * FROM get_followed_by_user( {} , 10000, 0)".format(item[0])
+        query2 = engine.execute(sql2)
+        friends = []
+        for item2 in query2:
+            friend = FriendItem(item2[0], item2[1], item2[2], item2[3])
+            friends.append(friend)
+
+        sql3 = "SELECT * FROM get_list_by_ownerid( {} , 10000, 0)".format(item[0])
+        query3 = engine.execute(sql3)
+        lists = []
+        for item2 in query3:
+            sql4 = "SELECT * FROM get_songs_of_list( {} )".format(item2[0])
+            query4 = engine.execute(sql4)
+            songs = []
+            for item3 in query4:
+                sql5 = "SELECT * FROM get_album_by_id( {} )".format(item3[3])
+                query5 = engine.execute(sql5)
+                datos5 = query5.first()
+
+                sql6 = "SELECT * FROM get_author_name_by_id( {} )".format(datos5[3])
+                query6 = engine.execute(sql6)
+                datos6 = query6.first()
+
+                song = SongItem(item3[0], item3[1], item3[2], datos5[3], datos6[0], item3[3], datos5[1], item3[4])
+                songs.append(song)
+
+            list = PlaylistItem(item2[0], item2[1], item2[2], item[2], item2[3], item2[4], songs)
+            lists.append(list)
+        user = ProfileItem(item[0], item[1], item[2], item[3], friends, lists)
+        users.append(user)
+
+    return users
 
 
-def search_song(name=None, author=None, genre=None, skip=None, limit=None):  # noqa: E501
+def search_song(name='*****', author='******', genre='******', skip=0, limit=10):  # noqa: E501
     """busca canciones con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve cancionese que se ajusten a ellos  # noqa: E501
@@ -331,4 +504,20 @@ def search_song(name=None, author=None, genre=None, skip=None, limit=None):  # n
 
     :rtype: List[SongItem]
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM search_songs( '{}' , '{}' , '{}' , {} , {} )".format(name, author, genre, limit, skip)
+    query = engine.execute(sql)
+    songs = []
+
+    for item in query:
+        sql2 = "SELECT * FROM get_album_by_id( {} )".format(item[3])
+        query2 = engine.execute(sql2)
+
+        datos2 = query2.first()
+
+        sql3 = "SELECT * FROM get_author_name_by_id( {} )".format(datos2[3])
+        query3 = engine.execute(sql3)
+
+        datos3 = query3.first()
+        song = SongItem(item[0], item[1], item[2], datos2[3], datos3[0], item[3], datos2[1], item[4])
+        songs.append(song)
+    return songs

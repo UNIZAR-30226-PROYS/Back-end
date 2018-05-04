@@ -17,8 +17,8 @@
       <file leaf-file-name="public_controller.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="70" column="72" selection-start-line="70" selection-start-column="72" selection-end-line="70" selection-end-column="72" />
+            <state relative-caret-position="406">
+              <caret line="348" column="61" selection-start-line="348" selection-start-column="61" selection-end-line="348" selection-end-column="61" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -28,8 +28,13 @@
       </file>
       <file leaf-file-name="album_item.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/swagger_server/models/album_item.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="song_item.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/swagger_server/models/song_item.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-135" />
+            <state relative-caret-position="-45" />
           </provider>
         </entry>
       </file>
@@ -56,6 +61,7 @@
         <option value="$PROJECT_DIR$/swagger_server/__main__.py" />
         <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/swagger_server/database.py" />
+        <option value="$PROJECT_DIR$/swagger_server/controllers/users_controller.py" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/public_controller.py" />
       </list>
     </option>
@@ -69,9 +75,11 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="956" />
-    <option name="height" value="1035" />
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="x" value="623" />
+    <option name="y" value="24" />
+    <option name="width" value="1297" />
+    <option name="height" value="993" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -101,12 +109,6 @@
               <item name="Servidor" type="462c0819:PsiDirectoryNode" />
               <item name="swagger_server" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Servidor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Servidor" type="462c0819:PsiDirectoryNode" />
-              <item name="swagger_server" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -173,30 +175,30 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="979" extended-state="6" />
+    <frame x="623" y="24" width="1297" height="993" extended-state="4" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32896176" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="7" visible="true" weight="0.32919955" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3298969" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16226415" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25208333" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" weight="0.32934928" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3298969" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3298969" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,7 +207,32 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5865">
+          <caret line="391" column="16" selection-start-line="391" selection-start-column="16" selection-end-line="391" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3465">
+          <caret line="231" column="26" selection-start-line="231" selection-start-column="26" selection-end-line="231" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
@@ -360,11 +387,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/models/author_item.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-585" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -394,9 +416,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/models/playlist_item.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/database.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -407,25 +426,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/models/album_item.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-135" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/admins_controller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="25" column="9" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/controllers/users_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="110" column="28" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/models/profile_item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/models/playlist_item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-45" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/models/author_item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="12" column="24" lean-forward="true" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/models/album_item.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/models/song_item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-45" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="70" column="72" selection-start-line="70" selection-start-column="72" selection-end-line="70" selection-end-column="72" />
+        <state relative-caret-position="406">
+          <caret line="348" column="61" selection-start-line="348" selection-start-column="61" selection-end-line="348" selection-end-column="61" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>

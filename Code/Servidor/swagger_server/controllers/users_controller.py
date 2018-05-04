@@ -108,7 +108,7 @@ def get_account():  # noqa: E501
 
     :rtype: AccountItem
     """
-    return 'do some magic!'
+    return auth.get_userid()
 
 
 @auth.enforce_auth
