@@ -23,6 +23,7 @@ CREATE TABLE list
   userid       INTEGER     NOT NULL,
   creationdate DATE        NOT NULL,
   description  TEXT,
+  isfav        boolean default false not null,
   CONSTRAINT list_pkey
   PRIMARY KEY (id),
   CONSTRAINT list_user_id_fk
@@ -131,6 +132,24 @@ CREATE TABLE follower
   CONSTRAINT follower__fk_fid
   FOREIGN KEY (followedid) REFERENCES "User"
 );
+
+create table usersession
+(
+  id     serial  not null,
+  userid integer not null,
+  listid integer,
+  songid integer,
+  time   integer,
+  constraint usersession_pkey
+  primary key (id),
+  constraint usersession_user_id_fk
+  foreign key (userid) references "User",
+  constraint usersession_listsong_listid_songid_fk
+  foreign key (listid, songid) references listsong
+);
+
+create unique index usersession_userid_uindex
+  on usersession (userid);
 
 -- ROLES --
 -- Creado el rol de escritura y lectura

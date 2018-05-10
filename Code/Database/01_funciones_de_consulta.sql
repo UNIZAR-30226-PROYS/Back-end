@@ -118,18 +118,37 @@ CREATE FUNCTION get_authors_by_name(query VARCHAR(75), lim INT, ofset INT) RETUR
     OFFSET ofset;
   $$ LANGUAGE sql;
   
-CREATE FUNCTION insert_new_play_list(name VARCHAR(75), userid INT, bio text) RETURNS BOOLEAN AS
-  $$
-  BEGIN
+create or replace function insert_new_play_list(name character varying, userid integer, bio text)
+  returns integer
+language plpgsql
+as $$
+DECLARE
+    new_id INT;
+BEGIN
     IF userid IN (SELECT id FROM "User") THEN
       INSERT INTO list (name, userid, creationdate, description)
-      VALUES ($1,$2,current_date,$3);
+      VALUES ($1,$2,current_date,$3) RETURNING id INTO new_id;
+      RETURN new_id;
+    ELSE
+      RETURN null;
+    END IF;
+  END;
+$$;
+  
+create function insert_fav_play_list(name character varying, userid integer, bio text)
+  returns boolean
+language plpgsql
+as $$
+BEGIN
+    IF userid IN (SELECT id FROM "User") THEN
+      INSERT INTO list (name, userid, creationdate, description, isfav)
+      VALUES ($1,$2,current_date,$3, TRUE);
       RETURN FOUND;
     ELSE
       RETURN FALSE;
     END IF;
   END;
-  $$ LANGUAGE plpgsql;
+$$;
   
 CREATE FUNCTION insert_new_user(username VARCHAR(75), mail VARCHAR(75), name VARCHAR(200), password VARCHAR(200)) RETURNS BOOLEAN AS
   $$
@@ -140,7 +159,8 @@ CREATE FUNCTION insert_new_user(username VARCHAR(75), mail VARCHAR(75), name VAR
       INSERT INTO "User" (username, email, name, password)
       VALUES ($1, $2, $3, $4)
       RETURNING id INTO new_id;
-      RETURN insert_new_play_list('Favoritos', new_id, 'Tu música favorita');
+      INSERT INTO usersession (userid) VALUES (new_id);
+      RETURN insert_fav_play_list('Favoritos', new_id, 'Tu música favorita');
     ELSE
       RETURN FALSE;
     END IF;
@@ -371,10 +391,111 @@ CREATE OR REPLACE FUNCTION search_album(in_name VARCHAR(75), in_auth VARCHAR(75)
   LIMIT in_lim
   OFFSET in_off
   $$ language sql;
+
+CREATE OR REPLACE FUNCTION check_list_user(in_user INT, in_list INT) RETURNS BIGINT AS
+  $$
+  SELECT COUNT(id)
+  FROM list
+  WHERE userid = in_user AND id = in_list
+  $$ language sql;
+
+create function unfollow_user(actual integer, unfollowed integer) returns boolean as $$
+BEGIN
+    IF (actual IN (SELECT id FROM "User")) AND (unfollowed IN (SELECT id FROM "User")) THEN
+      IF actual IN (SELECT userid FROM follower WHERE userid = actual AND followedid = unfollowed) THEN
+        DELETE FROM follower WHERE userid = actual AND followedid = unfollowed;
+        RETURN FOUND;
+      ELSE
+        RETURN FALSE;
+      END IF;
+    ELSE
+      RETURN FALSE;
+    END IF;
+  END;
+$$ language plpgsql;
+
+create or replace function del_list_song(in_list INT, in_song INT) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    DELETE FROM listsong WHERE listid = in_list AND songid = in_song;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
+
+create or replace function del_list(in_list INT) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    IF (SELECT isfav FROM list WHERE id = in_list) = TRUE THEN
+      RETURN FALSE;
+    ELSE
+      DELETE FROM listsong WHERE listid = in_list;
+      DELETE FROM list WHERE id = in_list;
+      RETURN FOUND;
+    end if;
+  end;
+  $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE function del_user(in_id INT) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    DELETE FROM usersession WHERE userid = in_id;
+    DELETE FROM listsong WHERE listid IN (SELECT id FROM list WHERE userid = in_id);
+    DELETE FROM list WHERE userid = in_id;
+    DELETE FROM follower WHERE userid = in_id OR followedid = in_id;
+    DELETE FROM "User" WHERE id = in_id;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
   
+CREATE OR REPLACE FUNCTION get_session(in_userid INT) RETURNS usersession AS
+  $$
+  SELECT * FROM usersession WHERE userid = in_userid;
+  $$ LANGUAGE sql;
 
+CREATE OR REPLACE FUNCTION update_list(in_list INT, in_name varchar(75), in_desc text) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    IF (SELECT isfav FROM list WHERE id = in_list) = TRUE THEN
+      RETURN FALSE;
+    ELSE
+      UPDATE list set name = in_name, description = in_desc WHERE id = in_list;
+      RETURN FOUND;
+    end if;
+  end;
+  $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION search_one_list(in_owner int, in_text text, in_name VARCHAR(75)) RETURNS INTEGER AS
+  $$
+    SELECT id
+    FROM list
+    WHERE description = in_text AND name = in_name AND userid = in_owner
+    ORDER BY creationdate DESC
+    LIMIT 1;
+  $$ LANGUAGE sql;
 
+CREATE OR REPLACE FUNCTION update_user(in_id INT, in_bio TEXT, in_name VARCHAR(200), in_user VARCHAR(75)) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE "User" SET bio = in_bio, name = in_name, username = in_user WHERE id = in_id;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_user_credentials(in_id INT, in_email VARCHAR(75), in_pass VARCHAR(200)) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE "User" SET email = in_email, password = in_pass WHERE id = in_id;
+    RETURN FOUND;
+  END;
+  $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_user_session(in_id INT, in_list INT, in_song INT, in_time INT) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE usersession SET listid = in_list, songid = in_song, time = in_time WHERE userid = in_id;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
 
 
 
