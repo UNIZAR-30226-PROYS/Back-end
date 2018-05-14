@@ -73,8 +73,10 @@ def get_album(albumID):  # noqa: E501
     query3 = engine.execute(sql3)
     songs = []
     for item in query3:
+        genero = []
+        genero.append(item[4])
         song = SongItem(item[0], item[1], item[2], datos['authorid'], datos2[0],
-                        albumID, datos['name'], item[4])
+                        albumID, datos['name'], genero)
         songs.append(song)
 
     return AlbumItem(datos['id'], datos['name'], datos['authorid'], datos2[0], datos['publishdate'],
@@ -123,7 +125,9 @@ def get_author(authorID):  # noqa: E501
         songs = []
 
         for item2 in query3:
-            song = SongItem(item2[0], item2[1], item2[2], authorID, datos['name'], item[0], item[1], item2[4])
+            genero = []
+            genero.append(item2[4])
+            song = SongItem(item2[0], item2[1], item2[2], authorID, datos['name'], item[0], item[1], genero)
             songs.append(song)
 
         album = AlbumItem(item[0], item[1], authorID, datos['name'], item[2], item[4], songs)
@@ -179,7 +183,11 @@ def get_playlist(playlistID):  # noqa: E501
         query5 = engine.execute(sql5)
 
         datos5 = query5.first()
-        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], item[4])
+
+        genero = []
+        genero.append(item[4])
+
+        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], genero)
         songs.append(song)
 
     return PlaylistItem(datos[0], datos[1], datos[2], datos2[2], datos[3], datos[4], songs)
@@ -226,7 +234,10 @@ def get_profile(profileID):  # noqa: E501
             query6 = engine.execute(sql6)
 
             datos6 = query6.first()
-            song = SongItem(item2[0], item2[1], item2[2], datos5[3], datos6[0], item2[3], datos5[1], item2[4])
+
+            genero = []
+            genero.append(item2[4])
+            song = SongItem(item2[0], item2[1], item2[2], datos5[3], datos6[0], item2[3], datos5[1], genero)
             songs.append(song)
         list = PlaylistItem(item[0], item[1], item[2], datos[2], item[3], item[4], songs)
         lists.append(list)
@@ -258,8 +269,10 @@ def get_song(songID):  # noqa: E501
     query3 = engine.execute(sql3)
 
     datos3 = query3.first()
+    genero = []
+    genero.append(datos[4])
 
-    return SongItem(datos[0], datos[1], datos[2], datos2[3], datos3[0], datos[3], datos2[1], datos[4])
+    return SongItem(datos[0], datos[1], datos[2], datos2[3], datos3[0], datos[3], datos2[1], genero)
 
 
 
@@ -344,9 +357,11 @@ def search_album(name='*****', author='*****', skip=0, limit=10):  # noqa: E501
         query3 = engine.execute(sql3)
         songs = []
         for item2 in query3:
-            song = SongItem(item2[0], item2[1], item2[2], item[3], datos[0], item[0], item[1], item2[4])
+            genero = []
+            genero.append(item2[4])
+            song = SongItem(item2[0], item2[1], item2[2], item[3], datos[0], item[0], item[1], genero)
             songs.append(song)
-        album = AlbumItem(item[0], item[1], item[3], datos[0], item[2], item[4])
+        album = AlbumItem(item[0], item[1], item[3], datos[0], item[2], item[4], songs)
         albums.append(album)
     return albums
 
@@ -377,7 +392,9 @@ def search_authors(name='*****', skip=0, limit=10):  # noqa: E501
             query3 = engine.execute(sql3)
             songs = []
             for item3 in query3:
-                song = SongItem(item3[0], item3[1], item3[2], item[0], item[1], item2[0], item2[1], item3[4])
+                genero = []
+                genero.append(item3[4])
+                song = SongItem(item3[0], item3[1], item3[2], item[0], item[1], item2[0], item2[1], genero)
                 songs.append(song)
             album = AlbumItem(item2[0], item2[1], item[0], item[1], item2[2], item2[4], songs)
             albums.append(album)
@@ -423,7 +440,9 @@ def search_playlist(name='*****', owner='*****', skip=0, limit=10):  # noqa: E50
             query6 = engine.execute(sql6)
             datos6 = query6.first()
 
-            song = SongItem(item3[0], item3[1], item3[2], datos5[3], datos6[0], item3[3], datos5[1], item3[4])
+            genero = []
+            genero.append(item3[4])
+            song = SongItem(item3[0], item3[1], item3[2], datos5[3], datos6[0], item3[3], datos5[1], genero)
             songs.append(song)
 
         playlist = PlaylistItem(item[0], item[1], item[2], datos2[2], item[3], item[4], songs)
@@ -475,7 +494,9 @@ def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: 
                 query6 = engine.execute(sql6)
                 datos6 = query6.first()
 
-                song = SongItem(item3[0], item3[1], item3[2], datos5[3], datos6[0], item3[3], datos5[1], item3[4])
+                genero = []
+                genero.append(item3[4])
+                song = SongItem(item3[0], item3[1], item3[2], datos5[3], datos6[0], item3[3], datos5[1], genero)
                 songs.append(song)
 
             list = PlaylistItem(item2[0], item2[1], item2[2], item[2], item2[3], item2[4], songs)
@@ -518,6 +539,9 @@ def search_song(name='*****', author='******', genre='******', skip=0, limit=10)
         query3 = engine.execute(sql3)
 
         datos3 = query3.first()
-        song = SongItem(item[0], item[1], item[2], datos2[3], datos3[0], item[3], datos2[1], item[4])
+
+        genero = []
+        genero.append(item[4])
+        song = SongItem(item[0], item[1], item[2], datos2[3], datos3[0], item[3], datos2[1], genero)
         songs.append(song)
     return songs

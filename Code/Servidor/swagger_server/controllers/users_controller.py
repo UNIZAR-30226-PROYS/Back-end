@@ -61,7 +61,9 @@ def add_playlist(playlistItem=None):  # noqa: E501
         query5 = engine.execute(sql5)
 
         datos5 = query5.first()
-        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], item[4])
+        genero = []
+        genero.append(item[4])
+        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], genero)
         songs.append(song)
 
     return PlaylistItem(datos[0], datos[1], datos[2], datos2[2], datos[3], datos[4], songs)
@@ -119,7 +121,9 @@ def add_playlist_song(playlistID, songID = None):  # noqa: E501
         query5 = engine.execute(sql5)
 
         datos5 = query5.first()
-        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], item[4])
+        genero = []
+        genero.append(item[4])
+        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], genero)
         songs.append(song)
 
     return PlaylistItem(datos[0], datos[1], datos[2], datos2[2], datos[3], datos[4], songs)
@@ -247,7 +251,9 @@ def get_account():  # noqa: E501
             query6 = engine.execute(sql6)
 
             datos6 = query6.first()
-            song = SongItem(item2[0], item2[1], item2[2], datos5[3], datos6[0], item2[3], datos5[1], item2[4])
+            genero = []
+            genero.append(item2[4])
+            song = SongItem(item2[0], item2[1], item2[2], datos5[3], datos6[0], item2[3], datos5[1], genero)
             songs.append(song)
         list = PlaylistItem(item[0], item[1], item[2], datos[3], item[3], item[4], songs)
         lists.append(list)
@@ -411,7 +417,10 @@ def update_playlist(playlistID, playlistItem=None):  # noqa: E501
         query5 = engine.execute(sql5)
 
         datos5 = query5.first()
-        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], item[4])
+
+        genero = []
+        genero.append(item[4])
+        song = SongItem(item[0], item[1], item[2], datos4[3], datos5[0], item[3], datos4[1], genero)
         songs.append(song)
 
     return PlaylistItem(datos[0], datos[1], datos[2], datos2[2], datos[3], datos[4], songs)
