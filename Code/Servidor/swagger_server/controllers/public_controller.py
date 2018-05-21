@@ -153,7 +153,14 @@ def get_author_image(authorID):  # noqa: E501
 
     :rtype: file
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM artist WHERE authorid = {}".format(authorID)
+    query = engine.execute(sql)
+    datos = query.first()
+
+    if datos is None:
+        return 'Not found', 404
+
+    return Response(datos['image'], mimetype="image/png")
 
 
 def get_playlist(playlistID):  # noqa: E501
