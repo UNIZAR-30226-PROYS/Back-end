@@ -300,8 +300,21 @@ def get_song_file(songID):  # noqa: E501
 
     :rtype: file
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM song WHERE id = {}".format(songID)
+    query = engine.execute(sql)
+    datos = query.first()
 
+    if datos is None:
+        return 'Not found', 404
+
+    file = datos['file']
+    size = 1024
+
+    def stream(file, size):
+        for i in range(0, len(file), size):
+            yield bytes(file[i:i + size])
+
+    return Response(stream(file, size), mimetype="audio/mpeg")
 
 def get_song_image(songID):  # noqa: E501
     """obtiene la carátula de una canción

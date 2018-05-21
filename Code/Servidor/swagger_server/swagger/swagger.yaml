@@ -195,7 +195,7 @@ paths:
       description: "Obtiene el archivo de audio de la canción identificada por songID\n"
       operationId: "get_song_file"
       produces:
-      - "application/vnd.mp3"
+      - "audio/mpeg"
       parameters:
       - name: "songID"
         in: "path"
