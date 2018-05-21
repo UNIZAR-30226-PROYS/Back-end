@@ -12,7 +12,7 @@ from swagger_server.models.song_item import SongItem  # noqa: E501
 from swagger_server.models.friend_item import FriendItem  # noqa: E501
 from swagger_server import util
 
-from flask import session
+from flask import session, Response
 from swagger_server.database import engine
 import swagger_server.authentificator as auth
 
@@ -93,7 +93,14 @@ def get_album_image(albumID):  # noqa: E501
 
     :rtype: file
     """
-    return 'do some magic!'
+    sql = "SELECT * FROM album WHERE id = {}".format(albumID)
+    query = engine.execute(sql)
+    datos = query.first()
+
+    if datos is None:
+        return 'Not found', 404
+
+    return Response(datos['image'], mimetype="image/png")
 
 
 def get_author(authorID):  # noqa: E501
