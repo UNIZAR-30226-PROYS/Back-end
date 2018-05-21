@@ -326,8 +326,24 @@ def get_song_image(songID):  # noqa: E501
 
     :rtype: file
     """
-    return 'do some magic!'
 
+    sql = "SELECT * FROM get_songinfo_by_id( {} )".format(songID)
+    query = engine.execute(sql)
+    datos = query.first()
+
+    if datos['id'] is None:
+        return 'Not found', 404
+
+    albumID = datos['albumid']
+
+    sql = "SELECT * FROM album WHERE id = {}".format(albumID)
+    query = engine.execute(sql)
+    datos = query.first()
+
+    if datos is None:
+        return 'Not found', 404
+
+    return Response(datos['image'], mimetype="image/png")
 
 def login(loginItem=None):  # noqa: E501
     """inicia sesión de usuario
