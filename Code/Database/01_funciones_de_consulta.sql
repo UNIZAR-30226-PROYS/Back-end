@@ -1,17 +1,17 @@
 CREATE FUNCTION get_user_by_id(id INT) RETURNS "User" AS
   $$
-    SELECT id, username, email, name, bio, password FROM "User" WHERE id = $1;
+    SELECT * FROM "User" WHERE id = $1;
   $$ LANGUAGE sql;
 
 CREATE FUNCTION get_user_by_username(username VARCHAR(75)) RETURNS "User" AS
   $$
-    SELECT id, username, email, name, bio, password FROM "User" WHERE username = $1;
+    SELECT * FROM "User" WHERE username = $1;
   $$ LANGUAGE sql;
 
 
 CREATE FUNCTION get_user_by_mail(mail VARCHAR(75)) RETURNS "User" AS
   $$
-    SELECT id, username, email, name, bio, password FROM "User" WHERE email = $1;
+    SELECT * FROM "User" WHERE email = $1;
   $$ LANGUAGE sql;
   
 CREATE type user_public_info as (id int, username VARCHAR(75), name VARCHAR(200), bio TEXT);
@@ -497,5 +497,11 @@ CREATE OR REPLACE FUNCTION update_user_session(in_id INT, in_list INT, in_song I
   end;
   $$ LANGUAGE plpgsql;
 
-
+CREATE OR REPLACE FUNCTION make_admin(in_id INT) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE "User" SET admin = TRUE WHERE id = in_id;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
 

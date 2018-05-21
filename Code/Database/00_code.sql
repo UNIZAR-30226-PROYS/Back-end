@@ -6,6 +6,7 @@ CREATE TABLE "User"
   name     VARCHAR(200),
   bio      TEXT,
   password VARCHAR(200) NOT NULL,
+  admin    boolean default false not null,
   CONSTRAINT "User_pkey"
   PRIMARY KEY (id)
 );

@@ -369,6 +369,9 @@ def login(loginItem=None):  # noqa: E501
 
     auth.sign_in(usuario['id'])
 
+    if usuario['admin']:
+        auth.sign_admin()
+
     return AccountItem(usuario['id'], usuario['username'], usuario['name'], usuario['bio'], usuario['email'])
 
 
