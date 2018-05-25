@@ -199,13 +199,13 @@ CREATE FUNCTION insert_song_in_list(list INT, song INT) RETURNS BOOLEAN AS
   END;
   $$ LANGUAGE plpgsql;
   
-CREATE FUNCTION insert_new_artist(in_name VARCHAR(75), in_bio TEXT, path_image Text) RETURNS BOOLEAN AS
+CREATE FUNCTION insert_new_artist(in_name VARCHAR(75), in_bio TEXT, image bytea) RETURNS BOOLEAN AS
   $$
   DECLARE
     new_id INT;
   BEGIN
     INSERT INTO author (name, bio) VALUES (in_name, in_bio) RETURNING id INTO new_id;
-    INSERT INTO artist (authorid, image) VALUES (new_id, bytea_import(path_image));
+    INSERT INTO artist (authorid, image) VALUES (new_id, image);
     RETURN FOUND;
   END;
   $$ LANGUAGE plpgsql;
@@ -230,10 +230,10 @@ create function add_artist_to_group (artist INT, grup INT) RETURNS BOOLEAN AS
   END;
   $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION insert_new_album(in_name VARCHAR(75), in_date DATE, in_author INT, in_desc TEXT, path_image TEXT) RETURNS BOOLEAN AS
+CREATE FUNCTION insert_new_album(in_name VARCHAR(75), in_date DATE, in_author INT, in_desc TEXT, image bytea) RETURNS BOOLEAN AS
   $$
   BEGIN
-    INSERT INTO album (name, publishdate, authorid, description, image) VALUES (in_name, in_date, in_author, in_desc, bytea_import(path_image));
+    INSERT INTO album (name, publishdate, authorid, description, image) VALUES (in_name, in_date, in_author, in_desc, image);
     RETURN FOUND;
   END;
   $$ LANGUAGE plpgsql;
@@ -249,12 +249,12 @@ create function bytea_import(p_path text, p_result out bytea) as
 	end;
 $$ language plpgsql;
 
-CREATE FUNCTION insert_new_song(in_name VARCHAR(75), path_file text, in_len INT, in_album INT, in_genre VARCHAR(75)) RETURNS BOOLEAN AS
+CREATE FUNCTION insert_new_song(in_name VARCHAR(75), file bytea, in_len INT, in_album INT, in_genre VARCHAR(75)) RETURNS BOOLEAN AS
   $$
   DECLARE
     new_id INT;
   BEGIN
-    INSERT INTO song (name, file, lenght, albumid) VALUES (in_name, bytea_import(path_file), in_len, in_album) RETURNING id INTO new_id;
+    INSERT INTO song (name, file, lenght, albumid) VALUES (in_name, file, in_len, in_album) RETURNING id INTO new_id;
     INSERT INTO genre (name, songid) VALUES (in_genre, new_id);
     RETURN FOUND;
   end;
@@ -473,6 +473,14 @@ CREATE OR REPLACE FUNCTION update_list(in_list INT, in_name varchar(75), in_desc
       UPDATE list set name = in_name, description = in_desc WHERE id = in_list;
       RETURN FOUND;
     end if;
+  end;
+  $$ LANGUAGE plpgsql;
+  
+CREATE OR REPLACE FUNCTION update_song_file(songid INT, in_file bytea) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE song set file = in_file WHERE id = songid;
+    RETURN FOUND;
   end;
   $$ LANGUAGE plpgsql;
 
