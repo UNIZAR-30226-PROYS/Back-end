@@ -6,13 +6,11 @@ SELECT insert_new_user('B','bob@mail.net','Bob','BpassB');
 SELECT insert_new_user('C','charlie@mail.net','Charlie','CpassC');
 SELECT insert_new_user('D','dario@mail.net','Dario','DpassD');
 
--- grupos
-SELECT insert_new_group('Soundatelier', 'Descripcion vacia');
-SELECT insert_new_group('The moose', 'Descripcion vacia');
-SELECT insert_new_group('2Invention', 'Descripcion vacia');
-
 -- artista
-SELECT insert_new_artist('Addict sound', 'Descripcion vacia', '/usr/src/datosPoblar/artistas/addictid_sound.png');
+SELECT insert_new_artist('Soundatelier', 'Descripcion vacia', '/usr/src/datosPoblar/artistas/def.png');
+SELECT insert_new_artist('The moose', 'Descripcion vacia', '/usr/src/datosPoblar/artistas/def.png');
+SELECT insert_new_artist('2Invention', 'Descripcion vacia', '/usr/src/datosPoblar/artistas/def.png');
+SELECT insert_new_artist('Addict sound', 'Descripcion vacia', '/usr/src/datosPoblar/artistas/def.png');
 
 -- album
 SELECT insert_new_album('Art collection', '01/01/2016', 1, 'Descripcion vacia', '/usr/src/datosPoblar/caratulas/caratula.png');

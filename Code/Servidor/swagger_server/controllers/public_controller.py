@@ -479,8 +479,14 @@ def search_playlist(name='*****', owner='*****', skip=0, limit=10):  # noqa: E50
         name = ''
         owner = ''
         sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
-    else:
+    if name == '*****':
+        name = ''
         sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
+    if owner == '*****':
+        owner = ''
+        sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
+    else:
+        sql = "SELECT * FROM search_listsAnd( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
     query = engine.execute(sql)
     lists = []
     for item in query:

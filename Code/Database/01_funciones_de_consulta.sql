@@ -357,6 +357,18 @@ CREATE OR REPLACE FUNCTION search_lists(in_name VARCHAR(75), in_owner VARCHAR(75
   LIMIT in_lim
   OFFSET in_off
   $$ LANGUAGE sql;
+  
+  CREATE OR REPLACE FUNCTION search_listsAnd(in_name VARCHAR(75), in_owner VARCHAR(75), in_lim INT, in_off INT) RETURNS SETOF list AS
+  $$
+  SELECT l.*
+	FROM list l, "User" u
+	WHERE l.name ILIKE '%' || in_name || '%'
+      AND l.userid = u.id
+      AND (u.username ILIKE '%' || in_owner || '%'
+            OR u.name ILIKE '%' || in_owner || '%')
+  LIMIT in_lim
+  OFFSET in_off
+  $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION get_userinfo_by_id(in_id INT) RETURNs user_public_info AS
   $$
