@@ -525,3 +525,38 @@ CREATE OR REPLACE FUNCTION make_admin(in_id INT) RETURNS BOOLEAN AS
   end;
   $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION search_usersAnd(in_name VARCHAR(75), in_username VARCHAR(75), in_lim INT, in_off INT) RETURNS SETOF user_public_info AS
+  $$
+  SELECT id, username, name, bio
+  FROM "User"
+  WHERE name ILIKE '%' || in_name || '%' AND username  ILIKE '%' || in_username || '%'
+  LIMIT in_lim
+  OFFSET in_off
+  $$ LANGUAGE sql;
+  
+create function search_songsAnd(in_name character varying, in_auth character varying, in_genre character varying, in_lim integer, in_off integer)
+  returns SETOF song_info
+language sql
+as $$
+SELECT s.id, s.name, s.lenght, s.albumid, g.name
+    FROM song s, genre g, album a, author au
+    WHERE s.id = g.songid
+          AND s.albumid = a.id
+          AND a.authorid = au.id
+          AND s.name ILIKE '%' || in_name || '%'
+          AND au.name ILIKE '%' || in_auth || '%'
+          AND g.name ILIKE '%' || in_genre || '%'
+    LIMIT in_lim
+    OFFSET in_off;
+$$;
+
+CREATE OR REPLACE FUNCTION search_albumAnd(in_name VARCHAR(75), in_auth VARCHAR(75), in_lim INT, in_off INT) RETURNS SETOF album AS
+  $$
+  SELECT a.*
+  FROM album a, author au
+  WHERE a.name ILIKE '%' || in_name || '%'
+        AND a.authorid = au.id
+        AND au.name ILIKE '%' || in_auth || '%'
+  LIMIT in_lim
+  OFFSET in_off
+  $$ language sql;

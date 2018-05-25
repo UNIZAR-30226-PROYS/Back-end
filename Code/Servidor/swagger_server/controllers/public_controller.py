@@ -375,7 +375,7 @@ def login(loginItem=None):  # noqa: E501
     return AccountItem(usuario['id'], usuario['username'], usuario['name'], usuario['bio'], usuario['email'])
 
 
-def search_album(name='*****', author='*****', skip=0, limit=10):  # noqa: E501
+def search_album(name='', author='', skip=0, limit=10):  # noqa: E501
     """busca álbunes con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve álbunes que se ajusten a ellos  # noqa: E501
@@ -392,12 +392,7 @@ def search_album(name='*****', author='*****', skip=0, limit=10):  # noqa: E501
     :rtype: List[AlbumItem]
     """
 
-    if name == '*****' and author == '*****':
-        name = ''
-        author = ''
-        sql = "SELECT * FROM search_album( '{}' , '{}' , {} , {} )".format(name, author, limit, skip)
-    else:
-        sql = "SELECT * FROM search_album( '{}' , '{}' , {} , {} )".format(name, author, limit, skip)
+    sql = "SELECT * FROM search_albumAnd( '{}' , '{}' , {} , {} )".format(name, author, limit, skip)
     query = engine.execute(sql)
     albums = []
     for item in query:
@@ -418,7 +413,7 @@ def search_album(name='*****', author='*****', skip=0, limit=10):  # noqa: E501
     return albums
 
 
-def search_authors(name='*****', skip=0, limit=10):  # noqa: E501
+def search_authors(name='', skip=0, limit=10):  # noqa: E501
     """busca autores con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve autores que se ajusten a ellos  # noqa: E501
@@ -432,11 +427,8 @@ def search_authors(name='*****', skip=0, limit=10):  # noqa: E501
 
     :rtype: List[AuthorItem]
     """
-    if name == '*****':
-        name = ''
-        sql = "SELECT * FROM search_author( '{}' , {} , {} )".format(name, limit, skip)
-    else:
-        sql = "SELECT * FROM search_author( '{}' , {} , {} )".format(name, limit, skip)
+
+    sql = "SELECT * FROM search_author( '{}' , {} , {} )".format(name, limit, skip)
     query = engine.execute(sql)
     authors = []
     for item in query:
@@ -459,7 +451,7 @@ def search_authors(name='*****', skip=0, limit=10):  # noqa: E501
     return authors
 
 
-def search_playlist(name='*****', owner='*****', skip=0, limit=10):  # noqa: E501
+def search_playlist(name='', owner='', skip=0, limit=10):  # noqa: E501
     """busca listas de reproducción con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve listas de reproducción que se ajusten a ellos  # noqa: E501
@@ -475,18 +467,8 @@ def search_playlist(name='*****', owner='*****', skip=0, limit=10):  # noqa: E50
 
     :rtype: List[PlaylistItem]
     """
-    if name == '*****' and owner == '*****':
-        name = ''
-        owner = ''
-        sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
-    if name == '*****':
-        name = ''
-        sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
-    if owner == '*****':
-        owner = ''
-        sql = "SELECT * FROM search_lists( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
-    else:
-        sql = "SELECT * FROM search_listsAnd( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
+
+    sql = "SELECT * FROM search_listsAnd( '{}' , '{}' , {} , {} )".format(name, owner, limit, skip)
     query = engine.execute(sql)
     lists = []
     for item in query:
@@ -516,7 +498,7 @@ def search_playlist(name='*****', owner='*****', skip=0, limit=10):  # noqa: E50
     return lists
 
 
-def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: E501
+def search_profiles(name='', username='', skip=0, limit=10):  # noqa: E501
     """busca usuarios con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve usuarios que se ajusten a ellos.  # noqa: E501
@@ -533,12 +515,7 @@ def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: 
     :rtype: List[ProfileItem]
     """
 
-    if name == '*****' and username == '*****':
-        name = ''
-        username = ''
-        sql = "SELECT * FROM search_users( '{}' , '{}' , {}, {} )".format(name, username, limit, skip)
-    else:
-        sql = "SELECT * FROM search_users( '{}' , '{}' , {}, {} )".format(name, username, limit, skip)
+    sql = "SELECT * FROM search_usersAnd( '{}' , '{}' , {}, {} )".format(name, username, limit, skip)
     query = engine.execute(sql)
     users = []
 
@@ -579,7 +556,7 @@ def search_profiles(name='*****', username='*****', skip=0, limit=10):  # noqa: 
     return users
 
 
-def search_song(name='*****', author='*****', genre='*****', skip=0, limit=10):  # noqa: E501
+def search_song(name='', author='', genre='', skip=0, limit=10):  # noqa: E501
     """busca canciones con ciertos parámetros
 
     Al pasarle ciertos parámetros devuelve cancionese que se ajusten a ellos  # noqa: E501
@@ -598,13 +575,7 @@ def search_song(name='*****', author='*****', genre='*****', skip=0, limit=10): 
     :rtype: List[SongItem]
     """
 
-    if name == '*****' and author == '*****' and genre == '*****':
-        name = ''
-        author = ''
-        genre = ''
-        sql = "SELECT * FROM search_songs( '{}' , '{}' , '{}' , {} , {} )".format(name, author, genre, limit, skip)
-    else:
-        sql = "SELECT * FROM search_songs( '{}' , '{}' , '{}' , {} , {} )".format(name, author, genre, limit, skip)
+    sql = "SELECT * FROM search_songsAnd( '{}' , '{}' , '{}' , {} , {} )".format(name, author, genre, limit, skip)
     query = engine.execute(sql)
     songs = []
 
