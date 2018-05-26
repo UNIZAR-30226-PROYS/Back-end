@@ -161,7 +161,17 @@ def delete_song_file(songID):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    connection = engine.connect()
+    trans = connection.begin()
+
+    sql = "SELECT * FROM update_song_file( {}, '{}') AS insertado;" \
+        .format(songID, '0x00')
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
 
 
 @auth.enforce_auth
@@ -246,7 +256,19 @@ def upload_song_file(songID, songFile):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    connection = engine.connect()
+    trans = connection.begin()
+
+    fichero = songFile.read()
+
+    sql = "SELECT * FROM update_song_file( {}, %s) AS insertado;" \
+        .format(songID)
+    query = connection.execute(sql, (fichero))
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
 
 
 @auth.enforce_auth
