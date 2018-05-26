@@ -197,7 +197,7 @@ def delete_song_image(songID):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return 'Endpoint sin uso, se usa la de album', 404
 
 
 @auth.enforce_auth
@@ -308,4 +308,4 @@ def upload_song_image(songID, songImage):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return 'Endpoint sin uso, se usa la imagen de album', 404
