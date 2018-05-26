@@ -116,7 +116,18 @@ def delete_album_image(albumID):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    connection = engine.connect()
+    trans = connection.begin()
+
+
+    sql = "SELECT * FROM update_album_image( {}, '{}') AS insertado;" \
+        .format(albumID, '0x00')
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
 
 
 @auth.enforce_auth
@@ -222,7 +233,19 @@ def upload_album_image(albumID, albumImage):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    connection = engine.connect()
+    trans = connection.begin()
+
+    fichero = albumImage.read()
+
+    sql = "SELECT * FROM update_album_image( {}, %s) AS insertado;" \
+        .format(albumID)
+    query = connection.execute(sql, (fichero))
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
 
 
 @auth.enforce_auth

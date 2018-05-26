@@ -487,6 +487,14 @@ CREATE OR REPLACE FUNCTION update_song_file(songid INT, in_file bytea) RETURNS B
   end;
   $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION update_album_image(albumid INT, in_file bytea) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE album set image = in_file WHERE id = albumid;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION search_one_list(in_owner int, in_text text, in_name VARCHAR(75)) RETURNS INTEGER AS
   $$
     SELECT id
