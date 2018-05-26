@@ -249,14 +249,14 @@ create function bytea_import(p_path text, p_result out bytea) as
 	end;
 $$ language plpgsql;
 
-CREATE FUNCTION insert_new_song(in_name VARCHAR(75), file bytea, in_len INT, in_album INT, in_genre VARCHAR(75)) RETURNS BOOLEAN AS
+CREATE FUNCTION insert_new_song(in_name VARCHAR(75), file bytea, in_len INT, in_album INT, in_genre VARCHAR(75)) RETURNS INT AS
   $$
   DECLARE
     new_id INT;
   BEGIN
     INSERT INTO song (name, file, lenght, albumid) VALUES (in_name, file, in_len, in_album) RETURNING id INTO new_id;
     INSERT INTO genre (name, songid) VALUES (in_genre, new_id);
-    RETURN FOUND;
+    RETURN new_id;
   end;
   $$ LANGUAGE plpgsql;
 

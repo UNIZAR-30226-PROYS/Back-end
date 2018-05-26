@@ -7,6 +7,10 @@ from swagger_server.models.song_item import SongItem  # noqa: E501
 from swagger_server.models.song_item_new import SongItemNew  # noqa: E501
 from swagger_server import util
 
+import swagger_server.controllers.public_controller as public
+
+from flask import session, Response
+from swagger_server.database import engine
 import swagger_server.authentificator as auth
 
 
@@ -58,7 +62,19 @@ def add_song(songItem=None):  # noqa: E501
     """
     if connexion.request.is_json:
         songItem = SongItemNew.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    connection = engine.connect()
+    trans = connection.begin()
+
+    sql = "SELECT * FROM insert_new_song( '{}', '{}', {} , {}, '{}') AS id;"\
+        .format(songItem.name, '0x00', songItem.lenght, songItem.album_id, songItem.genre[0])
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+
+    id = query.first()['id']
+
+    return public.get_song(id)
 
 
 @auth.enforce_auth
