@@ -357,6 +357,8 @@ def login(loginItem=None):  # noqa: E501
     if connexion.request.is_json:
         loginItem = LoginItem.from_dict(connexion.request.get_json())  # noqa: E501
 
+    auth.sign_out()
+
     sql = "SELECT * FROM get_user_by_mail( '{}' )".format(loginItem.mail)
     query = engine.execute(sql)
     usuario = query.first()
@@ -371,7 +373,7 @@ def login(loginItem=None):  # noqa: E501
     if usuario['admin']:
         auth.sign_admin()
 
-    return AccountItem(usuario['id'], usuario['username'], usuario['name'], usuario['bio'], usuario['email'])
+    return get_profile(usuario['id'])
 
 
 def search_album(name='', author='', skip=0, limit=10):  # noqa: E501
