@@ -28,7 +28,19 @@ def add_album(albumItem=None):  # noqa: E501
     """
     if connexion.request.is_json:
         albumItem = AlbumItemNew.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    connection = engine.connect()
+    trans = connection.begin()
+
+    sql = "SELECT * FROM insert_new_album( '{}', '{}', {} , '{}', '{}') AS id;" \
+        .format(albumItem.name, albumItem.publish_date, albumItem.author_id, albumItem.description, '0x00')
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+
+    id = query.first()['id']
+
+    return public.get_album(id)
 
 
 @auth.enforce_auth

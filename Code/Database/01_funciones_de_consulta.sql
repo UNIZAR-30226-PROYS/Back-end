@@ -231,11 +231,13 @@ create function add_artist_to_group (artist INT, grup INT) RETURNS BOOLEAN AS
   END;
   $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION insert_new_album(in_name VARCHAR(75), in_date DATE, in_author INT, in_desc TEXT, image bytea) RETURNS BOOLEAN AS
+CREATE FUNCTION insert_new_album(in_name VARCHAR(75), in_date DATE, in_author INT, in_desc TEXT, image bytea) RETURNS INT AS
   $$
+  DECLARE
+    new_id INT;
   BEGIN
-    INSERT INTO album (name, publishdate, authorid, description, image) VALUES (in_name, in_date, in_author, in_desc, image);
-    RETURN FOUND;
+    INSERT INTO album (name, publishdate, authorid, description, image) VALUES (in_name, in_date, in_author, in_desc, image) RETURNING id INTO new_id;
+    RETURN new_id;
   END;
   $$ LANGUAGE plpgsql;
 
