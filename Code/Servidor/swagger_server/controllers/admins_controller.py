@@ -142,7 +142,17 @@ def delete_author_image(authorID):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    connection = engine.connect()
+    trans = connection.begin()
+
+    sql = "SELECT * FROM update_author_image( {}, '{}') AS insertado;" \
+        .format(authorID, '0x00')
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
 
 
 @auth.enforce_auth
@@ -262,7 +272,19 @@ def upload_author_image(authorID, authorImage):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    connection = engine.connect()
+    trans = connection.begin()
+
+    fichero = authorImage.read()
+
+    sql = "SELECT * FROM update_author_image( {}, %s) AS insertado;" \
+        .format(authorID)
+    query = connection.execute(sql, (fichero))
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
 
 
 @auth.enforce_auth

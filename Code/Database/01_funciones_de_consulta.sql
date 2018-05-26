@@ -495,6 +495,14 @@ CREATE OR REPLACE FUNCTION update_album_image(albumid INT, in_file bytea) RETURN
   end;
   $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION update_author_image(in_authorid INT, in_file bytea) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE artist set image = in_file WHERE authorid = in_authorid;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION search_one_list(in_owner int, in_text text, in_name VARCHAR(75)) RETURNS INTEGER AS
   $$
     SELECT id

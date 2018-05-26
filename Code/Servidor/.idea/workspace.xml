@@ -47,8 +47,8 @@
       <file leaf-file-name="admins_controller.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/swagger_server/controllers/admins_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2401">
-              <caret line="310" column="55" selection-start-line="310" selection-start-column="55" selection-end-line="310" selection-end-column="55" />
+            <state relative-caret-position="271">
+              <caret line="270" column="25" lean-forward="true" selection-start-line="270" selection-start-column="25" selection-end-line="270" selection-end-column="25" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -671,8 +671,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/admins_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2401">
-          <caret line="310" column="55" selection-start-line="310" selection-start-column="55" selection-end-line="310" selection-end-column="55" />
+        <state relative-caret-position="271">
+          <caret line="270" column="25" lean-forward="true" selection-start-line="270" selection-start-column="25" selection-end-line="270" selection-end-column="25" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
