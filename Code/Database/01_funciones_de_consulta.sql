@@ -478,6 +478,15 @@ CREATE OR REPLACE FUNCTION update_list(in_list INT, in_name varchar(75), in_desc
     end if;
   end;
   $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_song(in_song INT, in_name varchar(75), in_length INT, in_albumid INT, in_genre varchar(75)) RETURNS BOOLEAN AS
+  $$
+  BEGIN
+    UPDATE song set name = in_name, lenght = in_length, albumid = in_albumid WHERE id = in_song;
+    UPDATE genre set name = in_genre WHERE songid = in_song;
+    RETURN FOUND;
+  end;
+  $$ LANGUAGE plpgsql;
   
 CREATE OR REPLACE FUNCTION update_song_file(songid INT, in_file bytea) RETURNS BOOLEAN AS
   $$

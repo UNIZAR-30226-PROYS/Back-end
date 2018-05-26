@@ -226,7 +226,20 @@ def update_song(songID, songItem=None):  # noqa: E501
     """
     if connexion.request.is_json:
         songItem = SongItemNew.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    connection = engine.connect()
+    trans = connection.begin()
+
+    sql = "SELECT * FROM update_song( {}, '{}', {}, {}, '{}') AS insertado;" \
+        .format(songID, songItem.name, songItem.lenght, songItem.album_id, songItem.genre[0])
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+
+    if not query.first()['insertado']:
+        return 'Not found', 404
+
+    return public.get_song(songID)
 
 
 @auth.enforce_auth
