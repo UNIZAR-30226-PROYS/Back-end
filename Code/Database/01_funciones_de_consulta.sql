@@ -150,19 +150,20 @@ BEGIN
   END;
 $$;
   
-CREATE FUNCTION insert_new_user(username VARCHAR(75), mail VARCHAR(75), name VARCHAR(200), password VARCHAR(200)) RETURNS BOOLEAN AS
+CREATE FUNCTION insert_new_user(username VARCHAR(75), mail VARCHAR(75), name VARCHAR(200), password VARCHAR(200)) RETURNS INT AS
   $$
   DECLARE
     new_id INT;
   BEGIN
-    IF mail NOT IN (SELECT u.email FROM "User" u) THEN
+    IF mail NOT IN (SELECT u.email FROM "User" u) AND username NOT IN (SELECT u.username FROM "User" u) THEN
       INSERT INTO "User" (username, email, name, password)
       VALUES ($1, $2, $3, $4)
       RETURNING id INTO new_id;
       INSERT INTO usersession (userid) VALUES (new_id);
-      RETURN insert_fav_play_list('Favoritos', new_id, 'Tu música favorita');
+      PERFORM insert_fav_play_list('Favoritos', new_id, 'Tu música favorita');
+      RETURN new_id;
     ELSE
-      RETURN FALSE;
+      RETURN 0;
     END IF;
   END;
   $$ LANGUAGE plpgsql;

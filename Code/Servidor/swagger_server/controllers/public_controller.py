@@ -30,23 +30,22 @@ def create_account(signupItem=None):  # noqa: E501
     if connexion.request.is_json:
         signupItem = SignUpItem.from_dict(connexion.request.get_json())  # noqa: E501
 
-    search = search_profiles(username=signupItem.username)
-    if search.__len__() != 0:
-        return 'Username used', 400
+    connection = engine.connect()
+    trans = connection.begin()
 
-    sql = "SELECT * FROM insert_new_user( '{}', '{}', '{}' , '{}'); COMMIT;"\
+    sql = "SELECT * FROM insert_new_user( '{}', '{}', '{}' , '{}') AS id;"\
         .format(signupItem.username, signupItem.mail, signupItem.name, signupItem._pass)
-    engine.execute(sql)
+    query = connection.execute(sql)
+    trans.commit()
+    connection.close()
+    id = query.first()['id']
 
-    search = search_profiles(SignUpItem.name, signupItem.username, 0, 1)
-    if search.__len__() == 0:
-        return 'Error inserting', 400
-    inserted = search[0]
+    if id == 0:
+        return 'Username or mail used', 400
 
-    auth.sign_in(inserted.id)
+    auth.sign_in(id)
 
-    return AccountItem(inserted.id, inserted.username, inserted.name, inserted.bio,
-                       signupItem.mail, inserted.friends, inserted.playlists)
+    return get_profile(id)
 
 
 def get_album(albumID):  # noqa: E501

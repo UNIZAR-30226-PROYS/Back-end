@@ -32,32 +32,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="public_controller.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="public_controller.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="database.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/swagger_server/database.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="315">
+              <caret line="42" column="15" lean-forward="true" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
               <folding>
-                <element signature="e#0#42#0" expanded="true" />
+                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admins_controller.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="admins_controller.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/swagger_server/controllers/admins_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="69" column="73" selection-start-line="69" selection-start-column="73" selection-end-line="69" selection-end-column="73" />
+            <state relative-caret-position="330">
+              <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -113,9 +104,9 @@
         <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/users_controller.py" />
         <option value="$PROJECT_DIR$/swagger_server/authentificator.py" />
-        <option value="$PROJECT_DIR$/swagger_server/controllers/public_controller.py" />
         <option value="$PROJECT_DIR$/swagger_server/database.py" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/admins_controller.py" />
+        <option value="$PROJECT_DIR$/swagger_server/controllers/public_controller.py" />
       </list>
     </option>
   </component>
@@ -648,27 +639,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/models/song_item.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-45" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/models/album_item_new.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-405" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/database.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
           <folding>
             <element signature="e#0#42#0" expanded="true" />
           </folding>
@@ -677,8 +656,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/admins_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="69" column="73" selection-start-line="69" selection-start-column="73" selection-end-line="69" selection-end-column="73" />
+        <state relative-caret-position="330">
+          <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/models/song_item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-45" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="42" column="15" lean-forward="true" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
