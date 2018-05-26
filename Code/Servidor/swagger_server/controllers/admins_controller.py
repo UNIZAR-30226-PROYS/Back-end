@@ -57,7 +57,7 @@ def add_album_song(albumID, songID=None):  # noqa: E501
 
     :rtype: AlbumItem
     """
-    return 'do some magic!'
+    return 'Endpoint sin uso; modificar album a través de modificar canción', 404
 
 
 @auth.enforce_auth
