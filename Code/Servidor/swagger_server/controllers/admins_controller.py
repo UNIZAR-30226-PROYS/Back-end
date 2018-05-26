@@ -101,7 +101,7 @@ def delete_album(albumID):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return 'Endpoint sin uso', 404
 
 
 @auth.enforce_auth
@@ -167,7 +167,7 @@ def delete_song(songID):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return 'Endpoint sin uso', 404
 
 
 @auth.enforce_auth
