@@ -12,3 +12,5 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = 'postgresql://{0}:{1}@{2}:{3}/{4}'.format(
         DB_USER, DB_PASS, DB_SERVICE, DB_PORT, DB_NAME
     )
+    WEB_CORS = os.environ['WEB_CORS']
+    WEB_URI = os.environ['WEB_URI']

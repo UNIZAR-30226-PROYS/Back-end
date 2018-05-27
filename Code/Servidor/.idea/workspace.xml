@@ -14,34 +14,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="users_controller.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/swagger_server/controllers/users_controller.py">
+      <file leaf-file-name="__main__.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/swagger_server/__main__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5955">
-              <caret line="411" column="37" selection-start-line="411" selection-start-column="37" selection-end-line="411" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="public_controller.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/swagger_server/controllers/public_controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5475">
-              <caret line="365" column="43" lean-forward="true" selection-start-line="365" selection-start-column="43" selection-end-line="365" selection-end-column="43" />
+            <state relative-caret-position="210">
+              <caret line="14" column="60" lean-forward="true" selection-start-line="14" selection-start-column="60" selection-end-line="14" selection-end-column="60" />
               <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admins_controller.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/swagger_server/controllers/admins_controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2174">
-              <caret line="169" column="34" selection-start-line="169" selection-start-column="34" selection-end-line="169" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#24#40#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,13 +51,13 @@
         <option value="$PROJECT_DIR$/swagger_server/controllers/autentificador.py" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/autentificar.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
-        <option value="$PROJECT_DIR$/swagger_server/__main__.py" />
         <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/users_controller.py" />
         <option value="$PROJECT_DIR$/swagger_server/authentificator.py" />
         <option value="$PROJECT_DIR$/swagger_server/database.py" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/public_controller.py" />
         <option value="$PROJECT_DIR$/swagger_server/controllers/admins_controller.py" />
+        <option value="$PROJECT_DIR$/swagger_server/__main__.py" />
       </list>
     </option>
   </component>
@@ -101,7 +80,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -114,28 +92,11 @@
               <item name="Servidor" type="462c0819:PsiDirectoryNode" />
               <item name="swagger_server" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Servidor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Servidor" type="462c0819:PsiDirectoryNode" />
-              <item name="swagger_server" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Servidor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Servidor" type="462c0819:PsiDirectoryNode" />
-              <item name="swagger_server" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Servidor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Servidor" type="462c0819:PsiDirectoryNode" />
-              <item name="swagger_server" type="462c0819:PsiDirectoryNode" />
-              <item name="swagger" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -202,21 +163,21 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5005441" side_tool="true" weight="0.3285273" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32919955" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49945593" visible="true" weight="0.3285273" />
+      <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49945593" visible="true" weight="0.32749742" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32919955" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.09303591" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.092491835" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" weight="0.32934928" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" weight="0.32934928" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.092708334" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -230,7 +191,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5005441" side_tool="true" weight="0.3285273" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3298969" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49945593" visible="true" weight="0.32786885" />
@@ -239,24 +200,24 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" weight="0.32934928" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25134927" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32919955" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3298969" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32919955" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32896176" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3298969" />
+      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32919955" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,6 +237,23 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/swagger_server/database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger_server/__main__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="22" lean-forward="true" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+          <folding>
+            <element signature="e#24#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/models/account_item.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -406,9 +384,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -430,9 +405,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -454,9 +426,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -478,9 +447,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -543,8 +509,11 @@
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/autentificar.py" />
     <entry file="file://$PROJECT_DIR$/swagger_server/__main__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="26" selection-start-line="4" selection-end-line="5" />
+        <state relative-caret-position="210">
+          <caret line="14" column="60" lean-forward="true" selection-start-line="14" selection-start-column="60" selection-end-line="14" selection-end-column="60" />
+          <folding>
+            <element signature="e#24#40#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -594,9 +563,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -605,16 +571,10 @@
         <state relative-caret-position="-45" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/models/song_item_new.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/models/album_item_new.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-270" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/swagger_server/swagger/swagger.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/swagger_server/controllers/users_controller.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -627,9 +587,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5475">
           <caret line="365" column="43" lean-forward="true" selection-start-line="365" selection-start-column="43" selection-end-line="365" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -637,9 +594,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2174">
           <caret line="169" column="34" selection-start-line="169" selection-start-column="34" selection-end-line="169" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
