@@ -20,6 +20,12 @@ def get_userid():
         return session['userid']
     else:
         return None
+    
+def is_admin():
+    if 'admin' in session:
+        return session['admin']
+    else:
+        return False
 
 
 def enforce_auth(func):

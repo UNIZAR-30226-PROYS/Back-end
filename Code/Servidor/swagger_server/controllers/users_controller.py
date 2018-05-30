@@ -138,6 +138,9 @@ def delete_account():  # noqa: E501
 
     :rtype: None
     """
+    if auth.is_admin():
+        return "Can't delete admins", 400
+    
     sql = "SELECT * FROM del_user( {} ); COMMIT;".format(auth.get_userid())
     engine.execute(sql)
 
